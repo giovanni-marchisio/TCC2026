@@ -94,6 +94,21 @@ const UserRepository = {
         )
 
         return user;
+    },
+
+    async listAll(){
+        const [list] = await database.raw(
+            `SELECT
+            usuario.id,
+            usuario.email,
+            usuario.perfil,
+            usuario.ativo,
+            cliente.nome
+            FROM usuario
+            INNER JOIN cliente on cliente.usuario_id = usuario.id`
+        );
+
+        return list;
     }
 
 

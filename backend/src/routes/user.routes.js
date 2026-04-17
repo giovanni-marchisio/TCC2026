@@ -20,7 +20,7 @@ function userRoutes(server) {
 
     server.patch("/usuario/:id/restaurar", {
         preHandler: onlyAdmin
-    }, userController.restaurar);
+    }, userController.restore);
 }
 
 export { userRoutes };
