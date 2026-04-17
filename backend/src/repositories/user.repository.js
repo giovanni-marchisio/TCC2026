@@ -62,7 +62,7 @@ const UserRepository = {
                 cliente.nome
             FROM usuario
             INNER JOIN cliente on cliente.usuario_id = usuario.id
-            WHERE usuario.email = ?`,
+            WHERE usuario.email = ? AND ativo = TRUE`,
             [email]);
 
         return user[0];
@@ -77,14 +77,24 @@ const UserRepository = {
     },
     // No banco de dados tá com ON DELETE CASCADE, pelo que eu entendi da pra usar no TCC
     // Mas o recomendado é fazer uma transaction para ter como remover coisas como pedido, etc..
+    // Funções só pra admin ->
     async delete(id){
         const [user] = await database.raw(
-            `DELETE FROM usuario WHERE id = ?`,
+            `UPDATE usuario SET ativo = FALSE WHERE id = ?`,
             [id]
         )
 
         return user;
     },
+
+    async restore(id){
+        const [user] = await database.raw(
+            `UPDATE usuario SET ativo = TRUE WHERE id = ?`,
+            [id]
+        )
+
+        return user;
+    }
 
 
 }

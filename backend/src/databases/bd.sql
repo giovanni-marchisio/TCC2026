@@ -9,7 +9,8 @@ CREATE TABLE usuario (
     email_confirmado TINYINT DEFAULT 1,
     senha_hash VARCHAR(255),
     perfil ENUM('admin', 'cliente') DEFAULT 'cliente',
-    data_cadastro DATETIME DEFAULT NOW()
+    data_cadastro DATETIME DEFAULT NOW(),
+    ativo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE cliente (
@@ -52,6 +53,8 @@ CREATE TABLE produto (
     preco DECIMAL(10, 2) NOT NULL,
     categoria_id INT NOT NULL,
     estoque INT NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE, -- Vou usar isso para adicionar funcionabilidade de remover e restaurar
+    -- Só preciso lembrar do WHERE ativo = TRUE nas querie
 
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );

@@ -3,7 +3,6 @@ import './configs/env';
 
 import fastify from "fastify";
 import { userRoutes } from "./routes/user.routes";
-import { ValidationError, NotFoundError } from './utils/errors';
 import fjwt from '@fastify/jwt';
 
 const server = fastify();
@@ -20,7 +19,7 @@ server.register(fjwt, {
 })
 
 server.register(userRoutes, {
-    prefix: ""
+    prefix: "/api"
 });
 
 server.get("/health", async (request, reply) => {

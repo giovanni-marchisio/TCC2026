@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/user.repository';
 import { validateEmail } from '../utils/emailUtils';
-import { ConflictError, ValidationError, NotFoundError } from '../utils/errors';
+import { ConflictError, ValidationError, NotFoundError, UnauthorizedError } from '../utils/errors';
 
 const userService = {
     // Ainda preciso resolver o problema de colocar uma conta com CPF repetido.
@@ -29,9 +29,12 @@ const userService = {
     },
 
     async login(dados){
-        const { email, senha } = dados;
+        const { email, senha} = dados;
 
         const user = await UserRepository.findByEmail(email);
+        // Acho melhor verificar isso antes de tudo.
+        if (!user.ativo) throw new UnauthorizedError('Conta desativada');
+
         if (!user) throw new NotFoundError('Email ou senha inválidos!') // Não sei se modifico o erro aqui.. 
         const password = await bcrypt.compare(senha, user.senha_hash);
         if (!password) throw new ValidationError('Email ou senha inválidos!');
@@ -48,6 +51,16 @@ const userService = {
         }
 
         return UserRepository.delete(id);
+    },
+
+    async restore(id){
+        const user = await UserRepository.searchById(id);
+
+        if (!user) throw new NotFoundError('Usuário não existe!');
+
+        if (user.ativo) throw new ConflictError('Usuário já está ativo!');
+
+        return UserRepository.restore(id);
     }
 }
 

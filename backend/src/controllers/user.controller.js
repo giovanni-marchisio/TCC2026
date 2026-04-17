@@ -31,6 +31,14 @@ const userController = {
 
         await userService.delete(id);
         return reply.status(200).send();
+    },
+
+    /** @param {Request} request @param {Reply} reply */
+    async restore(request, reply){
+        const id = request.params.id;
+
+        await userService.restore(id);
+        return reply.status(200).send();
     }
 }
 
