@@ -45,7 +45,7 @@ const UserRepository = {
 
     async searchById(id){
         const [user] = await database.raw(
-            `SELECT COUNT(*) AS qtd_email FROM usuario WHERE id = ?`,
+            `SELECT COUNT(*) AS qtd FROM usuario WHERE id = ?`,
             [id]);
 
         return user[0];
@@ -59,7 +59,8 @@ const UserRepository = {
                 usuario.email,
                 usuario.senha_hash,
                 usuario.perfil,
-                cliente.nome
+                cliente.nome,
+                usuario.ativo
             FROM usuario
             INNER JOIN cliente on cliente.usuario_id = usuario.id
             WHERE usuario.email = ? AND ativo = TRUE`,
@@ -82,7 +83,7 @@ const UserRepository = {
         const [user] = await database.raw(
             `UPDATE usuario SET ativo = FALSE WHERE id = ?`,
             [id]
-        )
+        );
 
         return user;
     },

@@ -4,20 +4,21 @@ import { validateEmail } from '../utils/emailUtils';
 import { ConflictError, ValidationError, NotFoundError, UnauthorizedError } from '../utils/errors';
 
 const userService = {
-    // Ainda preciso resolver o problema de colocar uma conta com CPF repetido.
-    // Talvez criar uma função para verificar CPF no repository seja uma boa ?
+    // Sou r*tardado, tenho que verificar o CPF aqui!!
     async register(dados) {
 
         await validateEmail(dados.email);
         
-        const { qtd_email } = await UserRepository.searchByEmail(dados.email);
-        if (qtd_email > 0) {
+        const { qtd } = await UserRepository.searchByEmail(dados.email);
+        if (qtd > 0) {
             throw new ConflictError('Email já cadastrado!');
+            return; // Por algum motivo sem return aqui o bd pula um ID
         }
 
         const { qtd_cpf } = await UserRepository.searchByCpf(dados.cpf);
         if (qtd_cpf > 0) {
-            throw new ConflictError('ERROR'); // Acho que colocar algo como "CPF já cadastro"
+            throw new ConflictError('ERROR'); 
+            return;                 // Acho que colocar algo como "CPF já cadastro"
                                     // é errado, já que pode facilitar alguém a descobrir
                                     // informações que não deveria. (eu acho), mas vou deixar essa verificação aqui
         }
@@ -32,10 +33,10 @@ const userService = {
         const { email, senha} = dados;
 
         const user = await UserRepository.findByEmail(email);
-        // Acho melhor verificar isso antes de tudo.
+
+        if (!user) throw new NotFoundError('Email ou senha inválidos!');
         if (!user.ativo) throw new UnauthorizedError('Conta desativada');
 
-        if (!user) throw new NotFoundError('Email ou senha inválidos!') // Não sei se modifico o erro aqui.. 
         const password = await bcrypt.compare(senha, user.senha_hash);
         if (!password) throw new ValidationError('Email ou senha inválidos!');
 
@@ -47,7 +48,7 @@ const userService = {
         const { qtd } = await UserRepository.searchById(id);
         
         if (qtd === 0 ){
-            throw new NotFoundError('Usuário não encontrado')
+            throw new NotFoundError('Usuário não encontrado');
         }
 
         return UserRepository.delete(id);
@@ -61,6 +62,12 @@ const userService = {
         if (user.ativo) throw new ConflictError('Usuário já está ativo!');
 
         return UserRepository.restore(id);
+    },
+
+    async listAll(){
+        const list = await UserRepository.listAll();
+
+        return list;
     }
 }
 

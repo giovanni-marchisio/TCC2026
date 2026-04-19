@@ -10,7 +10,9 @@ const userController = {
         const dados = request.body;
 
         await userService.register(dados);
-        return reply.status(201).send();
+        return reply.status(201).send({
+            message: "Registrado com sucesso!"
+        });
     },
     
     /** @param {Request} request @param {Reply} reply */
@@ -22,15 +24,22 @@ const userController = {
             { expiresIn: '1d' }
         )
 
-        return reply.status(200).send({token, nome: user.nome});
+        return reply.status(200).send({
+            token, 
+            nome: user.nome, 
+            id: user.id
+        });
     },
 
+    // Controllers para contas ADM (eu deveria separar dos usuários, mas tenho preguiça)
     /** @param {Request} request @param {Reply} reply */
     async delete(request, reply){
         const id = request.params.id;
 
         await userService.delete(id);
-        return reply.status(200).send();
+        return reply.status(200).send({
+            message: "Usuário desativado!"
+        });
     },
 
     /** @param {Request} request @param {Reply} reply */
@@ -38,7 +47,16 @@ const userController = {
         const id = request.params.id;
 
         await userService.restore(id);
-        return reply.status(200).send();
+        return reply.status(200).send({
+            message: "Usuário reativado!"
+        });
+    },
+
+    /** @param {Request} request @param {Reply} reply */
+    async listAll(request, reply){
+        const list = await userService.listAll();
+        console.log(list);
+        return reply.status(200).send(list);
     }
 }
 

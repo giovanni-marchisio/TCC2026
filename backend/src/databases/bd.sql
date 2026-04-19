@@ -50,7 +50,7 @@ CREATE TABLE produto (
     imagem VARCHAR(255) NOT NULL,
     nome VARCHAR(100) NOT NULL,
     descricao VARCHAR(255),
-    preco DECIMAL(10, 2) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL, -- Talvez eu mude para int
     categoria_id INT NOT NULL,
     estoque INT NOT NULL,
     ativo BOOLEAN DEFAULT TRUE, -- Vou usar isso para adicionar funcionabilidade de remover e restaurar

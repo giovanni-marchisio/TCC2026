@@ -8,6 +8,6 @@ export async function onlyAdmin(request, reply){
     await request.jwtVerify();
 
     if (request.user.perfil !== 'admin'){
-        throw new ForbiddenError('Acesso negado!');
+        throw new UnauthorizedError('Acesso negado!');
     }
 }

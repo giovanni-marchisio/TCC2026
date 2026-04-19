@@ -12,6 +12,17 @@ function userRoutes(server) {
     // Rotas públicas
     server.post("/login", userController.login);
     server.post("/cadastrar", userController.register);
+    // Preciso criar as rotas de compra. Vou deixar alguns placeholders
+
+    // server.get("/carrinho", {
+    // preHandler:verifyToken 
+    // }, userController.cart);
+
+    // server.post("/checkout", {
+    // preHandler:verifyToken 
+    // }, userController.checkout);
+    
+    // Não sei se vai ser preciso uma rota para finalização da compra.
 
     // Rotas do adm
     server.delete("/usuario/:id", { 
@@ -21,6 +32,10 @@ function userRoutes(server) {
     server.patch("/usuario/:id/restaurar", {
         preHandler: onlyAdmin
     }, userController.restore);
+
+    server.get("/listar", {
+        preHandler: onlyAdmin
+    }, userController.listAll);
 }
 
 export { userRoutes };

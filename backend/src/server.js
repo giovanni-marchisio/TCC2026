@@ -4,6 +4,7 @@ import './configs/env';
 import fastify from "fastify";
 import { userRoutes } from "./routes/user.routes";
 import fjwt from '@fastify/jwt';
+import { storeRoutes } from './routes/store.routes';
 
 const server = fastify();
 
@@ -22,13 +23,16 @@ server.register(userRoutes, {
     prefix: "/api"
 });
 
+server.register(storeRoutes, {
+    prefix: "/api/produto"
+});
+
 server.get("/health", async (request, reply) => {
         return { status: "OK" };
 })
 
 server.listen({
-    port: 3000,
-    password: ""
+    port: 3000
 }, (err) => {
     if (err) {
         console.log(`Erro ao iniciar servidor.\n
