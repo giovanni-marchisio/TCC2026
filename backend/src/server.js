@@ -12,7 +12,9 @@ server.setErrorHandler((error, request, reply) => {
     const status = error.statusCode || 500;
     const msg = error.message || 'Erro interno do servidor!';
 
-    return reply.status(status).send({error: msg});
+    console.log(`Error: ${msg}\n Status: ${status}`);
+
+    return reply.status(status).send();
 })
 
 server.register(fjwt, {

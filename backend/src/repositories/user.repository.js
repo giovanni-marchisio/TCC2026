@@ -84,8 +84,6 @@ const UserRepository = {
             `UPDATE usuario SET ativo = FALSE WHERE id = ?`,
             [id]
         );
-
-        return user;
     },
 
     async restore(id){
@@ -93,8 +91,6 @@ const UserRepository = {
             `UPDATE usuario SET ativo = TRUE WHERE id = ?`,
             [id]
         )
-
-        return user;
     },
 
     async listAll(){

@@ -47,9 +47,7 @@ const userService = {
     async delete(id) {
         const { qtd } = await UserRepository.searchById(id);
         
-        if (qtd === 0 ){
-            throw new NotFoundError('Usuário não encontrado');
-        }
+        if (qtd === 0 ) throw new NotFoundError('Usuário não encontrado');
 
         return UserRepository.delete(id);
     },

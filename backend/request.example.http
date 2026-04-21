@@ -2,12 +2,13 @@
 
 @baseUrl = http://localhost:3000/api
 @token = TOKEN_AQUI
+### Login
 POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
     "email": "exemplo@email.com",
-    "senha": "123"
+    "senha": "123",
 }
 
 ### Cadastro
@@ -33,7 +34,7 @@ Authorization: Bearer {{token}}
     "imagem": "teste.png",
     "nome": "Produto teste",
     "descricao": "Este é um teste",
-    "preco": 10.50,
+    "preco": 1050,
     "categoria": 1,
     "estoque": 1
 }
@@ -47,6 +48,35 @@ Authorization: Bearer {{token}}
     "nome": "teste",
     "imagem": "teste.png"
 }
+
+### Modificar produto
+PATCH {{baseUrl}}/produto/modificar
+Content-Type: application/application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": 1,
+    "imagem": "teste.png",
+    "nome": "Produto teste modificado",
+    "descricao": "Este é um teste",
+    "preco": 1050,
+    "categoria": 1,
+    "estoque": 1
+}
+
+### Modificar categoria
+PATCH {{baseUrl}}/produto/categoria/modificar
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id":,
+    "nome":,
+    "imagem":
+}
+
+### Listar produtos
+GET {{baseUrl}}/produto/listar
 
 ### Listar usuários
 GET {{baseUrl}}/listar
