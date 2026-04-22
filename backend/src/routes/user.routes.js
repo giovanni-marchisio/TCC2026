@@ -6,11 +6,12 @@ import { verifyToken, onlyAdmin } from "../middlewares/auth.middleware";
  * @param {import("fastify").FastifyInstance} server 
  */
 
-function userRoutes(server) {
+export function userRoutes(server) {
 
     // Vou começar a separar as rotas já que eu fiz um middlewarezin de autenticação
     // Rotas públicas
     server.post("/login", userController.login);
+
     server.post("/cadastrar", userController.register);
     // Preciso criar as rotas de compra. Vou deixar alguns placeholders
 
@@ -37,5 +38,3 @@ function userRoutes(server) {
         preHandler: onlyAdmin
     }, userController.listAll);
 }
-
-export { userRoutes };

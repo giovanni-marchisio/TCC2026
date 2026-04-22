@@ -1,8 +1,7 @@
 import { database } from "../configs/database";
 
-const StoreRepository = {
-
-    async register(dados) {
+export const ProductRepository = {
+        async register(dados) {
 
         const {
             imagem,
@@ -13,19 +12,18 @@ const StoreRepository = {
             estoque
         } = dados;
 
-        const product = await database.raw(
+        await database.raw(
             `INSERT INTO produto (imagem, nome, descricao, preco, categoria_id, estoque)
             VALUES(?, ?, ?, ?, ?, ?)`,
             [imagem, nome, descricao, preco, categoria, estoque]
         );
 
-        return product;
+        return { message: 'Produto registrado'};
     },
 
-    async modify(dados){
+    async modify(id, dados){
 
         const {
-            id,
             imagem,
             nome,
             descricao,
@@ -34,7 +32,7 @@ const StoreRepository = {
             estoque
         } = dados;
 
-        const [product] = await database.raw(
+        await database.raw(
             `UPDATE produto SET
             imagem = ?,
             nome = ?,
@@ -46,40 +44,10 @@ const StoreRepository = {
             [imagem, nome,descricao, preco, categoria, estoque, id]
         );
 
+        return { message: 'Produto modificado' };
+
     },
-    // Vou modificar depois a tabela da categoria para poder excluir ela sem deletar.
-    async registerCategory(dados){
-        const {
-            nome,
-            imagem
-        } = dados;
-
-        const category = await database.raw(
-            `INSERT INTO categoria (nome, imagem)
-            VALUES(?, ?)`,
-            [nome, imagem]
-        );
-
-        return category;
-    },
-
-    async modifyCategory(dados){
-        const {
-            id,
-            nome,
-            imagem
-        } = dados;
-
-        const category = await database.raw(
-            `UPDATE categoria SET
-            nome = ?,
-            imagem = ?
-            WHERE id = ?`,
-            [nome, imagem, id]
-        );
-    },
-
-    async listAll(){
+        async list(){
         const [list] = await database.raw(
             `SELECT
                 produto.nome,
@@ -96,22 +64,24 @@ const StoreRepository = {
     },
 
     async delete(id) {
-        const [product] = await database.raw(
+        await database.raw(
             `UPDATE produto SET ativo = FALSE WHERE id = ?`,
             [id]
         );
+
+        return { message: 'Produto deletado' };
     },
 
-    // async deleteCategory(id){}, Preciso modificar a tabela no banco.
-
     async restore(id){
-        const [product] = await database.raw(
+        await database.raw(
             `UPDATE produto SET ativo = TRUE WHERE id = ?`,
             [id]
         );
+
+        return { message: 'Produto reativado' };
     },
 
-    async verifyProduct(id){
+    async existsById(id){
         const [product] = await database.raw(
             `SELECT COUNT(*) as qtd FROM produto WHERE id = ?`,
             [id]
@@ -119,26 +89,4 @@ const StoreRepository = {
 
         return product[0];
     },
-
-    async verifyCategory(id){
-        const [category] = await database.raw(
-            `SELECT COUNT(*) as qtd FROM categoria WHERE id = ?`,
-            [id]
-        );
-
-        return category[0];   
-    },
-
-    async findCategoryByName(name){
-
-        const [category] = await database.raw(
-            `SELECT COUNT(*) as qtd FROM categoria WHERE name ?`
-        );
-
-        return category[0];
-    }
-
-    
 }
-
-export { StoreRepository };

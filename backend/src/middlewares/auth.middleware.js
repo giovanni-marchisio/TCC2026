@@ -1,4 +1,4 @@
-import { UnauthorizedError, ForbiddenError } from "../utils/errors";
+import { UnauthorizedError } from "../utils/errors.utils";
 
 export async function verifyToken(request, reply){
     await request.jwtVerify();

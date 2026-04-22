@@ -1,6 +1,6 @@
 import dns from 'dns/promises';
 
-async function validateEmail(email) {
+export async function validateEmail(email) {
 
     const validFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -16,5 +16,3 @@ async function validateEmail(email) {
         throw new Error('Domínio do email não existe');
     }
 }
-
-export { validateEmail };

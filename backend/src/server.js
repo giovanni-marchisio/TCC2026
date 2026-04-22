@@ -2,9 +2,11 @@ import 'dotenv/config';
 import './configs/env';
 
 import fastify from "fastify";
-import { userRoutes } from "./routes/user.routes";
 import fjwt from '@fastify/jwt';
-import { storeRoutes } from './routes/store.routes';
+
+import { userRoutes } from "./routes/user.routes";
+import { productRoutes } from './routes/products.routes';
+import { categoryRoutes } from './routes/category.routes';
 
 const server = fastify();
 
@@ -25,8 +27,12 @@ server.register(userRoutes, {
     prefix: "/api"
 });
 
-server.register(storeRoutes, {
+server.register(productRoutes, {
     prefix: "/api/produto"
+});
+
+server.register(categoryRoutes, {
+    prefix: "/api/categoria"
 });
 
 server.get("/health", async (request, reply) => {

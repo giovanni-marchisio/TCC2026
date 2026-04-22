@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/user.repository';
-import { validateEmail } from '../utils/emailUtils';
-import { ConflictError, ValidationError, NotFoundError, UnauthorizedError } from '../utils/errors';
+import { validateEmail } from '../utils/email.utils';
+import { ConflictError, ValidationError, NotFoundError, UnauthorizedError } from '../utils/errors.utils';
 
-const userService = {
-    // Sou r*tardado, tenho que verificar o CPF aqui!!
+export const userService = {
     async register(dados) {
 
         await validateEmail(dados.email);
@@ -69,4 +68,3 @@ const userService = {
     }
 }
 
-export { userService };

@@ -1,6 +1,6 @@
 import { database } from "../configs/database"
 
-const UserRepository = {
+export const UserRepository = {
 
     async register(dados){
 
@@ -110,5 +110,3 @@ const UserRepository = {
 
 
 }
-
-export { UserRepository };

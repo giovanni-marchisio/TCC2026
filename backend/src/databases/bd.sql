@@ -35,6 +35,7 @@ CREATE TABLE endereco(
     uf CHAR(2),
     cep CHAR(9),
     endereco_principal BOOLEAN DEFAULT FALSE,
+    ativo BOOLEAN DEFAULT TRUE,
 
     FOREIGN KEY (cliente_id) REFERENCES cliente(id)
 );
@@ -42,7 +43,8 @@ CREATE TABLE endereco(
 CREATE TABLE categoria (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) UNIQUE,
-    imagem VARCHAR(255) NOT NULL
+    imagem VARCHAR(255) NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE produto (

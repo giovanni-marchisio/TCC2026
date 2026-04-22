@@ -3,7 +3,7 @@ import { userService } from "../services/user.service";
 /** @typedef {import("fastify").FastifyRequest} Request */
 /** @typedef {import("fastify").FastifyReply} Reply */
 
-const userController = {
+export const userController = {
 
     /** @param {Request} request @param {Reply} reply */
     async register(request, reply){
@@ -59,5 +59,3 @@ const userController = {
         return reply.status(200).send(list);
     }
 }
-
-export { userController };
