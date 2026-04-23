@@ -1,41 +1,41 @@
-import { CategoryRepository } from "../repositories/category.repository";
+import { categoryRepository } from "../repositories/category.repository";
 import { NotFoundError, ConflictError } from "../utils/errors.utils";
 
 export const categoryService = {
     async register(dados){
         const { nome } = dados;
-        const { qtd } = await CategoryRepository.findByName(nome);
+        const { qtd } = await categoryRepository.findByName(nome);
         if (qtd > 0 ) throw new ConflictError('Categoria já existe!');
-        return CategoryRepository.register({...dados});
+        return categoryRepository.register({...dados});
     },
 
     async modify(id, dados){
-        const { qtd } = await CategoryRepository.existsById(id);
+        const { qtd } = await categoryRepository.existsById(id);
         if ( qtd < 0) throw new NotFoundError('Categoria não existe!');
 
-        return CategoryRepository.modify(id, dados);
+        return categoryRepository.modify(id, dados);
 
     },
     
     async delete(id){
-        const category = await CategoryRepository.existsById(id);
+        const category = await categoryRepository.existsById(id);
         if (!category) throw new NotFoundError('Categoria não existe.');
 
-        return CategoryRepository.delete(id);
+        return categoryRepository.delete(id);
     },
 
     async restore(id){
-        const category = await CategoryRepository.existsById(id);
+        const category = await categoryRepository.existsById(id);
         if (!category) throw new NotFoundError('Categoria não existe.');
 
-        return CategoryRepository.restore(id);
+        return categoryRepository.restore(id);
     },
 
     async list(){
-        return CategoryRepository.list();
+        return categoryRepository.list();
     },
 
     async listAll(){
-        return CategoryRepository.listAll();
+        return categoryRepository.listAll();
     }
 }

@@ -1,5 +1,5 @@
-import { ProductRepository } from "../repositories/product.repository";
-import { CategoryRepository } from "../repositories/category.repository";
+import { productRepository } from "../repositories/product.repository";
+import { categoryRepository } from "../repositories/category.repository";
 import { ConflictError, NotFoundError, ValidationError } from "../utils/errors.utils";
 
 export const productService = {
@@ -7,43 +7,43 @@ export const productService = {
             validateProduct(dados);
 
             const { categoria } = dados
-            const { qtd } = await ProductRepository.existsByName(nome);
+            const { qtd } = await productRepository.existsByName(nome);
             
             if (qtd > 0) throw new ConflictError('Produto já registrado!');
 
-            await CategoryRepository.findByName(categoria);
+            await categoryRepository.findByName(categoria);
             if (!categoria) throw new NotFoundError('Categoria não encontrada');
             
-            return ProductRepository.register({...dados});
+            return productRepository.register({...dados});
         },
     
         async modify(id, dados){
 
-            const { qtd } = await CategoryRepository.existsById(id);
+            const { qtd } = await categoryRepository.existsById(id);
             if ( qtd < 0 ) throw new NotFoundError('Categoria não existe!');
 
             validateProduct(dados);
-            return ProductRepository.modify(id, dados);
+            return productRepository.modify(id, dados);
         },
 
     async delete(id){
-        if (!ProductRepository.existsById(id)) throw new NotFoundError('Produto não existe!');
+        if (!productRepository.existsById(id)) throw new NotFoundError('Produto não existe!');
 
-        return ProductRepository.delete(id);
+        return productRepository.delete(id);
     },
 
     async restore(id){
-        if (!ProductRepository.existsById(id)) throw new NotFoundError('Produto não existe!');
+        if (!productRepository.existsById(id)) throw new NotFoundError('Produto não existe!');
 
-        return ProductRepository.restore(id);
+        return productRepository.restore(id);
     },
 
     async list(){
-        return ProductRepository.list();
+        return productRepository.list();
     },
 
     async listAll(){
-        return ProductRepository.listAll();
+        return productRepository.listAll();
     }
 }
 
