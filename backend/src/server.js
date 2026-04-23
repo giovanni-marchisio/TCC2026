@@ -24,7 +24,7 @@ server.register(fjwt, {
 })
 
 server.register(userRoutes, {
-    prefix: "/api"
+    prefix: "/api/usuario"
 });
 
 server.register(productRoutes, {
@@ -34,6 +34,10 @@ server.register(productRoutes, {
 server.register(categoryRoutes, {
     prefix: "/api/categoria"
 });
+
+/* server.register(addressRoutes, {
+    prefix: '/api/usuario/endereco'
+}); */
 
 server.get("/health", async (request, reply) => {
         return { status: "OK" };

@@ -93,7 +93,7 @@ export const UserRepository = {
         )
     },
 
-    async listAll(){
+    async list(){
         const [list] = await database.raw(
             `SELECT
             usuario.id,

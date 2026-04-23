@@ -1,7 +1,7 @@
 import { database } from "../configs/database";
 
 export const ProductRepository = {
-        async register(dados) {
+    async register(dados) {
 
         const {
             imagem,
@@ -47,7 +47,7 @@ export const ProductRepository = {
         return { message: 'Produto modificado' };
 
     },
-        async list(){
+    async list(){
         const [list] = await database.raw(
             `SELECT
                 produto.nome,
@@ -56,6 +56,24 @@ export const ProductRepository = {
                 produto.preco,
                 categoria.nome as categoria,
                 produto.estoque
+            FROM produto
+            INNER JOIN categoria ON categoria.id = produto.categoria_id
+            WHERE produto.ativo = TRUE AND categoria.ativo = TRUE`
+        );
+
+        return list;
+    },
+
+    async listAll(){
+        const [list] = await database.raw(
+            `SELECT
+                produto.nome,
+                produto.imagem,
+                produto.descricao,
+                produto.preco,
+                categoria.nome as categoria,
+                produto.estoque,
+                produto.ativo
             FROM produto
             INNER JOIN categoria ON categoria.id = produto.categoria_id`
         );
@@ -89,4 +107,13 @@ export const ProductRepository = {
 
         return product[0];
     },
+
+    async existsByName(name){
+        const [product] = await database.raw(
+            'SELECT COUNT(*) as qtd FROM produto WHERE nome = ?',
+            [name]
+        );
+
+        return product[0];
+    }
 }

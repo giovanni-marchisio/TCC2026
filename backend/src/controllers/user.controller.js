@@ -53,9 +53,10 @@ export const userController = {
     },
 
     /** @param {Request} request @param {Reply} reply */
-    async listAll(request, reply){
-        const list = await userService.listAll();
-        console.log(list);
+    async list(request, reply){
+        const list = await userService.list();
+
         return reply.status(200).send(list);
-    }
+    },
+
 }

@@ -1,0 +1,38 @@
+### Variáveis
+
+@baseUrl = http://localhost:3000/api/usuario
+@token = @token = TOKEN
+@id = 1
+
+### Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin",
+    "senha": "admin"
+}
+
+### Cadastro
+POST {{baseUrl}}/cadastrar
+Content-Type: application/json
+
+{
+    "email": "exemplo@email.com",
+    "senha": "123",
+    "nome": "Exemplo da Silva",
+    "telefone": "1599999999",
+    "cpf": "12345678911237"
+}
+
+### Deletar
+DELETE {{baseUrl}}/desativar/{{id}}
+Authorization: Bearer {{token}}
+
+### Restaurar
+PATCH {{baseUrl}}/restaurar/{{id}}
+Authorization: Bearer {{token}}
+
+### Listar 
+GET {{baseUrl}}/listar
+Authorization: Bearer {{token}}

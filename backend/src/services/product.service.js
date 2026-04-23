@@ -1,13 +1,16 @@
 import { ProductRepository } from "../repositories/product.repository";
 import { CategoryRepository } from "../repositories/category.repository";
-import { NotFoundError, ValidationError } from "../utils/errors.utils";
+import { ConflictError, NotFoundError, ValidationError } from "../utils/errors.utils";
 
 export const productService = {
         async register(dados){
             validateProduct(dados);
 
             const { categoria } = dados
-    
+            const { qtd } = await ProductRepository.existsByName(nome);
+            
+            if (qtd > 0) throw new ConflictError('Produto já registrado!');
+
             await CategoryRepository.findByName(categoria);
             if (!categoria) throw new NotFoundError('Categoria não encontrada');
             
@@ -15,11 +18,12 @@ export const productService = {
         },
     
         async modify(id, dados){
+
             const { qtd } = await CategoryRepository.existsById(id);
             if ( qtd < 0 ) throw new NotFoundError('Categoria não existe!');
-    
+
             validateProduct(dados);
-            return ProductRepository.modify({...dados, id: id});
+            return ProductRepository.modify(id, dados);
         },
 
     async delete(id){
@@ -36,6 +40,10 @@ export const productService = {
 
     async list(){
         return ProductRepository.list();
+    },
+
+    async listAll(){
+        return ProductRepository.listAll();
     }
 }
 

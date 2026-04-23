@@ -61,8 +61,8 @@ export const userService = {
         return UserRepository.restore(id);
     },
 
-    async listAll(){
-        const list = await UserRepository.listAll();
+    async list(){
+        const list = await UserRepository.list();
 
         return list;
     }

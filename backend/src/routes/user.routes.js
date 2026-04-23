@@ -26,15 +26,15 @@ export function userRoutes(server) {
     // Não sei se vai ser preciso uma rota para finalização da compra.
 
     // Rotas do adm
-    server.delete("/usuario/:id", { 
+    server.delete("/desativar/:id", { 
         preHandler: onlyAdmin 
     }, userController.delete);
 
-    server.patch("/usuario/:id/restaurar", {
+    server.patch("/restaurar/:id", {
         preHandler: onlyAdmin
     }, userController.restore);
 
     server.get("/listar", {
         preHandler: onlyAdmin
-    }, userController.listAll);
+    }, userController.list);
 }

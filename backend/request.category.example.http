@@ -1,0 +1,40 @@
+### Variáveis
+
+@baseUrl = http://localhost:3000/api/categoria
+@token = TOKEN
+@id = 1
+
+### Cadastrar 
+POST {{baseUrl}}/registrar
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "teste",
+    "imagem": "teste.png"
+}
+
+### Modificar
+PATCH {{baseUrl}}/modificar/{{id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "coisas",
+    "imagem": "testeimagem.png"
+}
+
+### Deletar
+DELETE {{baseUrl}}/deletar/{{id}}
+Authorization: Bearer {{token}}
+
+### Restaurar
+DELETE {{baseUrl}}/deletar/{{id}}
+Authorization: Bearer {{token}}
+
+### Listar
+GET {{baseUrl}}/listar
+
+### Listar todas
+GET {{baseUrl}}/listar/todas
+Authorization: Bearer {{token}}

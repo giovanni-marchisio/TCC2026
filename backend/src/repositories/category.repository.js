@@ -33,6 +33,57 @@ export const CategoryRepository = {
         return { message: 'Categoria modificada' };
     },
 
+    async delete(id){
+        await database.transaction(async (bd) => {
+            await bd.raw(
+                `UPDATE categoria SET ativo = FALSE WHERE id = ?`,
+                [id]
+            );
+
+            await bd.raw(
+                `UPDATE produto SET ativo = FALSE WHERE categoria_id = ?`,
+                [id]
+            );
+        });
+
+        return { message: 'Categoria deletada'};
+    },
+
+    async restore(id){
+        await database.transaction(async (bd) => {
+            await bd.raw(
+                `UPDATE categoria SET ativo = TRUE WHERE id = ?`,
+                [id]
+            );
+
+            await bd.raw(
+                `UPDATE produto SET ativo = TRUE WHERE categoria_id = ?`,
+                [id]
+            );
+        });
+
+        return { message: 'Categoria reativada'};
+    },
+
+    async list(){
+        const [list] = await database.raw(
+            `SELECT
+            categoria.nome,
+            categoria.imagem
+             FROM categoria WHERE ativo = TRUE`
+        );
+
+        return list;
+    },
+
+    async listAll(){
+        const [list] = await database.raw(
+            `SELECT * FROM categoria`
+        );
+
+        return list;
+    },
+
     async existsById(id){
         const [category] = await database.raw(
             `SELECT COUNT(*) as qtd FROM categoria WHERE id = ?`,
@@ -45,7 +96,8 @@ export const CategoryRepository = {
     async findByName(name){
 
         const [category] = await database.raw(
-            `SELECT COUNT(*) as qtd FROM categoria WHERE name ?`
+            `SELECT COUNT(*) as qtd FROM categoria WHERE nome = ?`,
+            [name]
         );
 
         return category[0];

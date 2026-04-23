@@ -8,7 +8,7 @@ export const productController = {
     async register(request, reply){
         const dados = request.body;
 
-        const ret = await storeService.register(dados);
+        const ret = await productService.register(dados);
         return reply.status(201).send(ret);
     },
 
@@ -32,7 +32,7 @@ export const productController = {
     async restore(request, reply){
         const id = request.params.id;
 
-        const ret = await storeService.restore(id);
+        const ret = await productService.restore(id);
         return reply.status(200).send(ret)
     },
 
@@ -40,6 +40,14 @@ export const productController = {
     async list(request, reply){
 
         const list = await productService.list();
+
+        return reply.status(200).send(list);
+    },
+
+    /** @param {Request} request @param {Reply} reply */
+    async listAll(request, reply){
+
+        const list = await productService.listAll();
 
         return reply.status(200).send(list);
     }
