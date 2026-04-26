@@ -7,13 +7,13 @@ export const categoryRepository = {
             imagem
         } = dados;
 
-        await database.raw(
+        const [category] = await database.raw(
             `INSERT INTO categoria (nome, imagem)
             VALUES(?, ?)`,
             [nome, imagem]
         );
 
-        return { message: 'Categoria registrada' };
+        return { id: category.insertId, message: 'Categoria registrada' };
     },
 
     async modify(id, dados){

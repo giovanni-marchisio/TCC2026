@@ -12,13 +12,13 @@ export const productRepository = {
             estoque
         } = dados;
 
-        await database.raw(
+        const [product] = await database.raw(
             `INSERT INTO produto (imagem, nome, descricao, preco, categoria_id, estoque)
             VALUES(?, ?, ?, ?, ?, ?)`,
             [imagem, nome, descricao, preco, categoria, estoque]
         );
 
-        return { message: 'Produto registrado'};
+        return { id: product.insertId, message: 'Produto registrado'};
     },
 
     async modify(id, dados){

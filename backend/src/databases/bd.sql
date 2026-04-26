@@ -2,7 +2,6 @@ CREATE DATABASE loja;
 
 USE  loja;
 
-
 CREATE TABLE usuario (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(150) UNIQUE,

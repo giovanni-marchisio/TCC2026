@@ -30,9 +30,26 @@ export const userRepository = {
                  [userId, nome, telefone, cpf]
             );
 
-            return { userId }
+            return { id: userId, message: "Usuário criado com sucesso!" }
         })
 
+    },
+    // Estou pensando em remover esta função, mas ainda acho que retornar a quantidade só para ver se o usuário existe é bom
+    async searchById(id){
+        const [user] = await database.raw(
+            `SELECT COUNT(*) AS qtd FROM usuario WHERE id = ?`,
+            [id]);
+
+        return user[0];
+    },
+
+    async findById(id){
+        const [user] = await database.raw(
+            `SELECT id FROM cliente WHERE usuario_id = ?`,
+            [id]
+        );
+
+        return user[0];
     },
 
     async searchByEmail(email){
@@ -42,16 +59,7 @@ export const userRepository = {
 
         return user[0];
     },
-
-    async searchById(id){
-        const [user] = await database.raw(
-            `SELECT COUNT(*) AS qtd FROM usuario WHERE id = ?`,
-            [id]);
-
-        return user[0];
-    },
-    // Pode parecer igual a função anterior, mas essa ACHA o email específico
-    // a outra só verifica se existe, talvez eu possa até remover ela depois, sei lá, feijão com farinha
+    
     async findByEmail(email){
         const [user] = await database.raw(
             `SELECT
@@ -93,20 +101,41 @@ export const userRepository = {
         )
     },
 
+    async modify(id, dados){
+        const { telefone, senha_hash } = dados;
+
+        if (telefone){
+            await database.raw(
+                `UPDATE cliente SET telefone = ? WHERE usuario_id = ?`,
+                [telefone, id]
+            );
+        }
+
+        if (senha_hash){
+            await database.raw(
+                `UPDATE usuario SET senha_hash = ? WHERE id = ?`,
+                [senha_hash, id]
+            );
+        }
+
+        return { message: 'Dados atualizados com sucesso!' }
+    },
+
     async list(){
         const [list] = await database.raw(
             `SELECT
             usuario.id,
             usuario.email,
             usuario.perfil,
+            usuario.data_cadastro,
             usuario.ativo,
-            cliente.nome
+            cliente.nome,
+            cliente.telefone
             FROM usuario
             INNER JOIN cliente on cliente.usuario_id = usuario.id`
         );
 
-        return list;
-    }
-
+        return list;  
+    },
 
 }

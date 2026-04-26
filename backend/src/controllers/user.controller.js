@@ -53,6 +53,15 @@ export const userController = {
     },
 
     /** @param {Request} request @param {Reply} reply */
+    async modify(request, reply){
+        const { id } = request.user;
+        const dados = request.body;
+
+        const ret = await userService.modify(id, dados);
+        return reply.status(200).send(ret);
+    },
+
+    /** @param {Request} request @param {Reply} reply */
     async list(request, reply){
         const list = await userService.list();
 

@@ -1,4 +1,4 @@
-import { categoryController } from "../controllers/category.controllers";
+import { categoryController } from "../controllers/category.controller";
 import { verifyToken, onlyAdmin } from "../middlewares/auth.middleware";
 
 /**

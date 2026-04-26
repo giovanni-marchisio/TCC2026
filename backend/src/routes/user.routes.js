@@ -25,6 +25,10 @@ export function userRoutes(server) {
     
     // Não sei se vai ser preciso uma rota para finalização da compra.
 
+    server.patch("/perfil", {
+        preHandler: verifyToken
+    }, userController.modify);
+
     // Rotas do adm
     server.delete("/desativar/:id", { 
         preHandler: onlyAdmin 

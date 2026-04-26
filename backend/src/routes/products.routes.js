@@ -1,4 +1,4 @@
-import { productController } from "../controllers/product.controllers";
+import { productController } from "../controllers/product.controller";
 import { verifyToken, onlyAdmin } from "../middlewares/auth.middleware";
 
 /**

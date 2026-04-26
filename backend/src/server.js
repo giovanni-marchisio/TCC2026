@@ -7,6 +7,7 @@ import fjwt from '@fastify/jwt';
 import { userRoutes } from "./routes/user.routes";
 import { productRoutes } from './routes/products.routes';
 import { categoryRoutes } from './routes/category.routes';
+import { addressRoutes } from './routes/address.routes';
 
 const server = fastify();
 
@@ -35,9 +36,9 @@ server.register(categoryRoutes, {
     prefix: "/api/categoria"
 });
 
-/* server.register(addressRoutes, {
+server.register(addressRoutes, {
     prefix: '/api/usuario/endereco'
-}); */
+});
 
 server.get("/health", async (request, reply) => {
         return { status: "OK" };

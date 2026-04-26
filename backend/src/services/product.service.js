@@ -6,7 +6,7 @@ export const productService = {
         async register(dados){
             validateProduct(dados);
 
-            const { categoria } = dados
+            const { categoria, nome } = dados
             const { qtd } = await productRepository.existsByName(nome);
             
             if (qtd > 0) throw new ConflictError('Produto já registrado!');
@@ -14,7 +14,7 @@ export const productService = {
             await categoryRepository.findByName(categoria);
             if (!categoria) throw new NotFoundError('Categoria não encontrada');
             
-            return productRepository.register({...dados});
+            return productRepository.register(dados); // tinha esquecido de tirar o spread
         },
     
         async modify(id, dados){

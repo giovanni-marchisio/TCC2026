@@ -55,16 +55,27 @@ export const userService = {
         const user = await userRepository.searchById(id);
 
         if (!user) throw new NotFoundError('Usuário não existe!');
-
         if (user.ativo) throw new ConflictError('Usuário já está ativo!');
 
         return userRepository.restore(id);
+    },
+
+    async modify(id, dados){
+        const { telefone, senha } = dados;
+
+        if (senha) {
+            dados.senha_hash = await bcrypt.hash(senha, 10);
+            delete dados.senha;
+        }
+
+        return userRepository.modify(id, dados);
     },
 
     async list(){
         const list = await userRepository.list();
 
         return list;
-    }
+    },
+    
 }
 

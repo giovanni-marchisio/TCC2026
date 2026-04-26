@@ -1,7 +1,7 @@
 ### Variáveis
 
 @baseUrl = http://localhost:3000/api/usuario
-@token = @token = TOKEN
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGVyZmlsIjoiY2xpZW50ZSIsImlhdCI6MTc3NzE3MjM3OCwiZXhwIjoxNzc3MjU4Nzc4fQ.JV3W9g_tmBcAnfhZxcyKqljL9dECVIJuHCujfnOINo8
 @id = 1
 
 ### Login
@@ -9,9 +9,11 @@ POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-    "email": "admin@admin",
-    "senha": "admin"
+    "email": "exemplo@email.com",
+    "senha": "123"
 }
+
+
 
 ### Cadastro
 POST {{baseUrl}}/cadastrar
@@ -23,6 +25,16 @@ Content-Type: application/json
     "nome": "Exemplo da Silva",
     "telefone": "1599999999",
     "cpf": "12345678911237"
+}
+
+### Modificar senha e/ou telefone
+PATCH {{baseUrl}}/perfil
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "senha": "1234",
+    "telefone": "1499999999"
 }
 
 ### Deletar
