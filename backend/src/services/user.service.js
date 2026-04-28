@@ -59,7 +59,7 @@ export const userService = {
 
         return userRepository.restore(id);
     },
-
+    // Preciso modificar isso aqui mais pra frente para separar a mudança de telefone da senha com link via email.
     async modify(id, dados){
         const { telefone, senha } = dados;
 

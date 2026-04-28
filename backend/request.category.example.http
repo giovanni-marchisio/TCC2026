@@ -1,7 +1,7 @@
 ### Variáveis
 
 @baseUrl = http://localhost:3000/api/categoria
-@token = TOKEN
+@token = token
 @id = 1
 
 ### Cadastrar 
@@ -10,8 +10,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "nome": "teste",
-    "imagem": "teste.png"
+    "nome": "Outra categoria2",
+    "imagem": "teste2.png"
 }
 
 ### Modificar

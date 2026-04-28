@@ -1,10 +1,11 @@
 @baseUrl = http://localhost:3000/api/usuario/endereco
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGVyZmlsIjoiY2xpZW50ZSIsImlhdCI6MTc3NzA2MDEwNywiZXhwIjoxNzc3MTQ2NTA3fQ.U2Omz0u-7vTQeJCkq4pcrjc0wbFAJjGefjfSIW06JFk
+@token = token
 @id = 1
 
+### Cadastrar
 POST {{baseUrl}}/cadastrar
-Authorization: Bearer {{token}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "apelido": "A casa do seu zé",
@@ -15,4 +16,20 @@ Content-Type: application/json
     "cidade": "São-Paulo",
     "uf": "SP",
     "cep": "100000000"
+}
+
+### Modificar
+PATCH {{baseUrl}}/modificar/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "apelido": "A casa do seu zé modificado",
+    "complemento": "Casa",
+    "logradouro": "Rua do seu fulano",
+    "numero": "123",
+    "bairro": "Aquele Bairro",
+    "cidade": "São-Paulo",
+    "uf": "SP",
+    "cep": "100000000" 
 }

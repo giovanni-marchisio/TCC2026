@@ -8,8 +8,10 @@ export const productController = {
     async register(request, reply){
         const dados = request.body;
 
-        const ret = await productService.register(dados);
-        return reply.status(201).send(ret);
+        const { id, affectedRows, info } = await productService.register(dados);
+        return reply.status(201).send(
+            { message: 'Produto registrado', id: id, affectedRows: affectedRows }
+        );
     },
 
     /** @param {Request} request @param {Reply} reply */
@@ -17,30 +19,35 @@ export const productController = {
         const { id } = request.params;
         const dados = request.body;
 
-        const ret = await productService.modify(id, dados);
-        return reply.status(200).send(ret);
+        const { info }= await productService.modify(id, dados);
+        return reply.status(200).send(
+            { message: 'Produto modificado', id: id, info: info }
+        );
     },
     /** @param {Request} request @param {Reply} reply */
     async delete(request, reply){
         const id = request.params.id;
         
-        const ret = await productService.delete(id);
-        return reply.status(200).send(ret);       
+        const { info } = await productService.delete(id);
+        return reply.status(200).send(
+            { message: 'Produto deletado', id: id, info: info }
+        );       
     },
 
     /** @param {Request} request @param {Reply} reply */
     async restore(request, reply){
         const id = request.params.id;
 
-        const ret = await productService.restore(id);
-        return reply.status(200).send(ret)
+        const { info } = await productService.restore(id);
+        return reply.status(200).send(
+            { message: 'Produto restaurado', id: id, info: info }
+        )
     },
 
     /** @param {Request} request @param {Reply} reply */
     async list(request, reply){
 
         const list = await productService.list();
-
         return reply.status(200).send(list);
     },
 
@@ -48,7 +55,6 @@ export const productController = {
     async listAll(request, reply){
 
         const list = await productService.listAll();
-
         return reply.status(200).send(list);
     }
 }

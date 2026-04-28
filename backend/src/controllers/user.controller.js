@@ -9,9 +9,9 @@ export const userController = {
     async register(request, reply){
         const dados = request.body;
 
-        await userService.register(dados);
+        const { insertId, affectedRows } = await userService.register(dados);
         return reply.status(201).send({
-            message: "Registrado com sucesso!"
+            message: "Registrado com sucesso!", id: insertId, affectedRows: affectedRows
         });
     },
     
@@ -31,14 +31,13 @@ export const userController = {
         });
     },
 
-    // Controllers para contas ADM (eu deveria separar dos usuários, mas tenho preguiça)
     /** @param {Request} request @param {Reply} reply */
     async delete(request, reply){
         const id = request.params.id;
 
         await userService.delete(id);
         return reply.status(200).send({
-            message: "Usuário desativado!"
+            message: "Usuário desativado!", id:id
         });
     },
 
@@ -48,7 +47,7 @@ export const userController = {
 
         await userService.restore(id);
         return reply.status(200).send({
-            message: "Usuário reativado!"
+            message: "Usuário reativado!", id:id
         });
     },
 
@@ -57,8 +56,10 @@ export const userController = {
         const { id } = request.user;
         const dados = request.body;
 
-        const ret = await userService.modify(id, dados);
-        return reply.status(200).send(ret);
+        const { info } = await userService.modify(id, dados);
+        return reply.status(200).send(
+            { message: 'Dados do usuário modificados', user: id, info: info }
+        );
     },
 
     /** @param {Request} request @param {Reply} reply */

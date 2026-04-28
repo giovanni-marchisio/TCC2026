@@ -16,13 +16,13 @@ export const userRepository = {
         // isto faz rollback caso tenha algum problema na criação do usuário.
         return database.transaction(async (bd) => {
 
-            const [userResult] = await bd.raw(
+            const [user] = await bd.raw(
                 `INSERT INTO usuario (email, senha_hash, perfil, data_cadastro)
                  VALUES (?, ?, 'cliente', NOW())`,
                  [email, senha_hash]
             );
 
-            const userId = userResult.insertId;
+            const userId = user.insertId;
 
             await bd.raw(
                 `INSERT INTO cliente (usuario_id, nome, telefone, cpf)
@@ -30,7 +30,7 @@ export const userRepository = {
                  [userId, nome, telefone, cpf]
             );
 
-            return { id: userId, message: "Usuário criado com sucesso!" }
+            return user;
         })
 
     },
@@ -70,7 +70,7 @@ export const userRepository = {
                 cliente.nome,
                 usuario.ativo
             FROM usuario
-            INNER JOIN cliente on cliente.usuario_id = usuario.id
+            INNER JOIN cliente ON cliente.usuario_id = usuario.id
             WHERE usuario.email = ? AND ativo = TRUE`,
             [email]);
 
@@ -92,6 +92,8 @@ export const userRepository = {
             `UPDATE usuario SET ativo = FALSE WHERE id = ?`,
             [id]
         );
+
+        return user;
     },
 
     async restore(id){
@@ -99,26 +101,29 @@ export const userRepository = {
             `UPDATE usuario SET ativo = TRUE WHERE id = ?`,
             [id]
         )
+
+        return user;
     },
 
     async modify(id, dados){
         const { telefone, senha_hash } = dados;
 
         if (telefone){
-            await database.raw(
+            const [phone] = await database.raw(
                 `UPDATE cliente SET telefone = ? WHERE usuario_id = ?`,
                 [telefone, id]
             );
+            return phone;
         }
 
         if (senha_hash){
-            await database.raw(
+            const [password] = await database.raw(
                 `UPDATE usuario SET senha_hash = ? WHERE id = ?`,
                 [senha_hash, id]
             );
-        }
 
-        return { message: 'Dados atualizados com sucesso!' }
+            return password;
+        }
     },
 
     async list(){
@@ -130,9 +135,18 @@ export const userRepository = {
             usuario.data_cadastro,
             usuario.ativo,
             cliente.nome,
-            cliente.telefone
+            cliente.telefone,
+            endereco.apelido,
+            endereco.complemento,
+            endereco.logradouro,
+            endereco.numero,
+            endereco.bairro,
+            endereco.cidade,
+            endereco.uf,
+            endereco.cep
             FROM usuario
-            INNER JOIN cliente on cliente.usuario_id = usuario.id`
+            LEFT JOIN cliente on cliente.usuario_id = usuario.id
+            LEFT JOIN endereco ON endereco.cliente_id = cliente.id`
         );
 
         return list;  

@@ -18,7 +18,7 @@ export const productRepository = {
             [imagem, nome, descricao, preco, categoria, estoque]
         );
 
-        return { id: product.insertId, message: 'Produto registrado'};
+        return product;
     },
 
     async modify(id, dados){
@@ -32,7 +32,7 @@ export const productRepository = {
             estoque
         } = dados;
 
-        await database.raw(
+        const [product] = await database.raw(
             `UPDATE produto SET
             imagem = ?,
             nome = ?,
@@ -44,7 +44,7 @@ export const productRepository = {
             [imagem, nome,descricao, preco, categoria, estoque, id]
         );
 
-        return { message: 'Produto modificado' };
+        return product;
 
     },
     async list(){
@@ -82,21 +82,21 @@ export const productRepository = {
     },
 
     async delete(id) {
-        await database.raw(
+        const [product] = await database.raw(
             `UPDATE produto SET ativo = FALSE WHERE id = ?`,
             [id]
         );
 
-        return { message: 'Produto deletado' };
+        return product;
     },
 
     async restore(id){
-        await database.raw(
+        const [product] = await database.raw(
             `UPDATE produto SET ativo = TRUE WHERE id = ?`,
             [id]
         );
 
-        return { message: 'Produto reativado' };
+        return product;
     },
 
     async existsById(id){

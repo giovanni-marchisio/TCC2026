@@ -12,4 +12,7 @@ export function addressRoutes(server){
         preHandler: verifyToken
     }, addressController.register);
     
+    server.patch('/modificar/:id', {
+        preHandler: verifyToken
+    }, addressController.modify);
 }

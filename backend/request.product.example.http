@@ -1,7 +1,7 @@
 ### Variáveis
 
 @baseUrl = http://localhost:3000/api/produto
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwicGVyZmlsIjoiYWRtaW4iLCJpYXQiOjE3NzcwNDYwMjgsImV4cCI6MTc3NzEzMjQyOH0.NuF8yXwaBesxZM29NGmuXOUAaB_y8ox7JUq33vxSLac
+@token = token
 @id = 1
 
 ### Cadastrar
@@ -25,7 +25,7 @@ Authorization: Bearer {{token}}
 
 {
     "imagem": "teste.png",
-    "nome": "Produto teste modificado",
+    "nome": "Produto teste modificado 2",
     "descricao": "Este é um teste",
     "preco": 1050,
     "categoria": 1,

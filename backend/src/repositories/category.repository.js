@@ -13,7 +13,7 @@ export const categoryRepository = {
             [nome, imagem]
         );
 
-        return { id: category.insertId, message: 'Categoria registrada' };
+        return category;
     },
 
     async modify(id, dados){
@@ -22,7 +22,7 @@ export const categoryRepository = {
             imagem
         } = dados;
 
-        await database.raw(
+        const [category] = await database.raw(
             `UPDATE categoria SET
             nome = ?,
             imagem = ?
@@ -30,11 +30,11 @@ export const categoryRepository = {
             [nome, imagem, id]
         );
 
-        return { message: 'Categoria modificada' };
+        return category;
     },
 
     async delete(id){
-        await database.transaction(async (bd) => {
+        const [category] = await database.transaction(async (bd) => {
             await bd.raw(
                 `UPDATE categoria SET ativo = FALSE WHERE id = ?`,
                 [id]
@@ -46,11 +46,11 @@ export const categoryRepository = {
             );
         });
 
-        return { message: 'Categoria deletada'};
+        return category;
     },
 
     async restore(id){
-        await database.transaction(async (bd) => {
+        const [category] = await database.transaction(async (bd) => {
             await bd.raw(
                 `UPDATE categoria SET ativo = TRUE WHERE id = ?`,
                 [id]
@@ -62,7 +62,7 @@ export const categoryRepository = {
             );
         });
 
-        return { message: 'Categoria reativada'};
+        return category;
     },
 
     async list(){
