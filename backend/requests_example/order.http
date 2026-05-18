@@ -1,0 +1,40 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "johndoe@email.com",
+    "password": "password"
+}
+
+###
+@token = {{login.response.body.token}}
+
+
+### Criar pedido
+POST {{baseUrl}}/pedidos/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "address_id": "1",
+    "items": [
+        {
+            "product_id": "1",
+            "quantity": "1"
+        }
+    ],
+    "payment_method": "pix" // cartão, boleto
+}
+
+### Listar pedidos
+GET {{baseUrl}}/pedidos/
+Authorization: Bearer {{token}}
+
+### Listar pedido por id
+GET {{baseUrl}}/pedidos/{{id}}
+Authorization: Bearer {{token}}
+

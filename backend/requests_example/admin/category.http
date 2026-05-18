@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin",
+    "password": "admin"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Lista de todas as categorias
+GET {{baseUrl}}/admin/categoria/
+Authorization: Bearer {{token}}
+
+### Registrar categoria
+POST {{baseUrl}}/admin/categoria/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"example category",
+    "image": "category.png"
+}
+
+### Deletar categoria
+DELETE  {{baseUrl}}/admin/categoria/{{id}}
+Authorization: Bearer {{token}}
+
+### Restaurar categoria
+PATCH   {{baseUrl}}/admin/categoria/restaurar/{{id}}
+Authorization: Bearer {{token}}
+
+### Modificar categoria
+PATCH {{baseUrl}}/admin/categoria/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"example",
+    "image": "example.png"
+}

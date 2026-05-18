@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+### Público
+### Lista de produtos disponíveis.
+GET {{baseUrl}}/produto/
+
+### Pesquisa por nome
+GET {{baseUrl}}/produto?name=
+
+### Pesquisa por ID
+GET {{baseUrl}}/produto/{{id}}

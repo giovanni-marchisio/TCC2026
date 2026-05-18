@@ -1,0 +1,18 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "johndoe@email.com",
+    "password": "password"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Listar pagamento por id
+GET {{baseUrl}}/{{id}}
+Authorization: Bearer {{token}}

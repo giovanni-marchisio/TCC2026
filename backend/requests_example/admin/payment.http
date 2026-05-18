@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin",
+    "password": "admin"
+}
+
+@token = {{login.response.body.token}}
+
+### Listar todos os pagamentos
+GET {{baseUrl}}/admin/pagamentos
+Authorization: Bearer {{token}}
+
+### Listar todos os pagamentos pendentes
+GET {{baseUrl}}/admin/pagamentos/pendente
+Authorization: Bearer {{token}}
+
+### Modificar status do pagamento
+PATCH {{baseUrl}}/admin/pagamentos/{{id}}/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "status": // pendente, aprovado, recusado, estornado
+}

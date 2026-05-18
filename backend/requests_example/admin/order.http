@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:3000/api
+@id = 8
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin",
+    "password": "admin"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Atualizar status
+PATCH {{baseUrl}}/admin/pedidos/{{id}}/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "status": // pendente, pago, enviado, entregue, cancelado
+}

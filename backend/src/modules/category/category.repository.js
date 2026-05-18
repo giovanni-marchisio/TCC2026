@@ -1,0 +1,148 @@
+import { database } from "../../configs/database";
+
+class CategoryRepositoryClass {
+    async register(data){
+        const {
+            name,
+            image
+        } = data;
+
+        const [category] = await database.raw(
+            `INSERT INTO categoria 
+            (
+                nome,
+                imagem
+            ) VALUES (?, ?)`, 
+            [name, image]
+        );
+
+        return { category_id: category.insertId };
+    };
+    async delete(id){
+        const [category] = await database.transaction(async (db) =>{
+            await db.raw(
+                `UPDATE categoria SET
+                    ativo = FALSE
+                 WHERE id = ?`,
+                [id]
+            );
+
+            await db.raw(
+                `UPDATE produto SET
+                    ativo = FALSE
+                 WHERE id = ?`,
+                [id]
+            );
+        });
+
+        return {
+            id: id,
+            affectedRows: category.affectedRows
+        };
+    };
+    async restore(id){
+        const [category] = await database.transaction(async (db) =>{
+            await db.raw(
+                `UPDATE categoria SET
+                    ativo = TRUE
+                 WHERE id = ?`,
+                [id]
+            );
+
+            await db.raw(
+                `UPDATE produto SET
+                    ativo = TRUE
+                 WHERE id = ?`,
+                [id]
+            );
+        });
+
+        return {
+            id: id,
+            affectedRows: category.affectedRows
+        };
+    };
+    async modify(id, data){
+        const {
+            name,
+            image
+        } = data;
+
+        const [category] = await database.raw(
+            `UPDATE categoria SET
+                nome = ?,
+                imagem = ?
+             WHERE id = ?`,
+            [name, image, id]
+        );
+
+        return {
+            id: id,
+            affectedRows: category.affectedRows
+        };
+    };
+    async list(){
+        const [list] = await database.raw(
+            `SELECT * FROM categoria
+             WHERE ativo = TRUE`
+        );
+
+        return list;
+    };
+    async listAll(){
+        const [list] = await database.raw(
+            `SELECT * 
+             FROM categoria`
+        );
+
+        return list;
+    };
+    async findById(id){
+        const [list] = await database.raw(
+            `SELECT
+                produto.id AS id,
+                produto.nome,
+                produto.imagem,
+                produto.descricao,
+                produto.preco,
+                categoria.nome as categoria,
+                produto.estoque,
+                produto.ativo
+             FROM produto
+             INNER JOIN categoria ON categoria.id = produto.categoria_id
+             WHERE categoria.id = ? AND produto.ativo = TRUE`,
+            [id]
+        );
+        return list;
+    };
+    async findByName(name){
+        const [category] = await database.raw(
+            `SELECT * FROM categoria
+            WHERE nome = ?`,
+            [name]
+        );
+
+        return category[0];
+    };
+    async searchByName(name){
+        const [list] = await database.raw(
+            `SELECT
+                produto.id AS id,
+                produto.nome,
+                produto.imagem,
+                produto.descricao,
+                produto.preco,
+                categoria.nome as categoria,
+                produto.estoque,
+                produto.ativo
+            FROM produto
+            INNER JOIN categoria ON categoria.id = produto.categoria_id
+            WHERE categoria.nome = ? AND produto.ativo = TRUE`,
+            [name]
+        );
+        
+        return list;
+    }
+}
+
+export const CategoryRepository = new CategoryRepositoryClass();

@@ -1,16 +1,15 @@
-import 'dotenv/config';
-import bcrypt from 'bcrypt';
-import { database } from '../configs/database.js';
+import "dotenv/config";
+import bcrypt from "bcrypt";
+import { database } from "../configs/database.js";
 
 async function createAdmin(){
     const email = process.argv[2];
     const password = process.argv[3];
-    const name = process.argv[4] || 'Adminstrador';
+    const name = process.argv[4] || "Adminstrador";
 
 
     if (!email || !password){
-        console.log(`${email} ${password}\n`)
-        console.log('Valor inválido!\nUso: node src/scripts/createAdmin.js <email> <senha> <nome>');
+        console.log("Dados inválidos!\nUso: node src/scripts/createAdmin.js <email> <senha> <nome>");
         process.exit(1);
     }
 
@@ -32,7 +31,7 @@ async function createAdmin(){
         );
     });
 
-    console.log('Admin criado com sucesso!');
+    console.log("Admin criado com sucesso!");
     process.exit(0);
 }
 

@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:3000/api
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "johndoe@email.com",
+    "password": "password"
+}
+
+###
+@token = {{login.response.body.token}}
+@id = 1
+
+### Lista de todos os endereços do usuário
+GET {{baseUrl}}/usuario/endereco/
+Authorization: Bearer {{token}}
+
+### Registrar endereço
+POST {{baseUrl}}/usuario/endereco/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "label": "example",
+    "addressLine2": "example",
+    "street": "example",
+    "streetNumber": "123",
+    "neighborhood": "example",
+    "city": "example",
+    "state": "SP",
+    "postalCode": "100000000"
+}
+
+### Deletar endereço
+GET {{baseUrl}}/usuario/endereco/{{id}}
+Authorization: Bearer {{token}}
+
+### Restaurar endereço
+GET {{baseUrl}}/usuario/endereco/restaurar/{{id}}
+Authorization: Bearer {{token}}
+
+### Modificar endereço
+PATCH {{baseUrl}}/usuario/endereco/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "label": "exomple",
+    "addressLine2": "example",
+    "street": "example",
+    "streetNumber": "123",
+    "neighborhood": "example",
+    "city": "example",
+    "state": "SP",
+    "postalCode": "100000000"
+}
+
+### Alterar o endereço principal
+GET {{baseUrl}}/usuario/endereco/principal/{{id}}
+Authorization: Bearer {{token}}
+
+### Endereço por id
+GET {{baseUrl}}/usuario/endereco/{{id}}
+Authorization: Bearer {{token}}

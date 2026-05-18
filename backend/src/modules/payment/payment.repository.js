@@ -1,0 +1,71 @@
+import { database } from "../../configs/database";
+
+class PaymentRepositoryClass {
+    async create(order_id, payment_method, value, db){
+        const [result] = await db.raw(
+            `INSERT INTO pagamento 
+            (
+                pedido_id,
+                metodo,
+                status,
+                valor
+            ) VALUES (?, ?, "pendente", ?)`,
+             [order_id, payment_method, value]
+        );
+
+        return result;
+    };
+    async findOrderById(order_id){
+        const [payment] = await database.raw(
+            `SELECT * FROM pagamento
+             WHERE pedido_id = ?`,
+             [order_id]
+        );
+
+        return payment[0];
+    };
+    async findAll(){
+        const [list] = await database.raw(
+            `SELECT
+                pagamento.*,
+                pedido.status AS status_pedido,
+                pedido.total,
+                cliente.nome AS cliente
+             FROM pagamento
+             JOIN pedido ON pedido.id = pagamento.pedido_id
+             JOIN cliente ON cliente.id = pagamento.cliente_id
+             ORDER BY pagamento.id DESC`
+        );
+
+        return list;
+    };
+    async findPendind(){
+        const [list] = await database.raw(
+            `SELECT
+                pagamento.*,
+                pedido.status AS status_pedido,
+                pedido.total,
+                cliente.nome AS liente,
+             FROM pagamento
+             JOIN pedido ON pedido.id = pagamento.pedido_id
+             JOIN cliente ON cliente.id = pagamento.cliente_id
+             WHERE pagamento.status = "pendente"
+             ORDER BY pagamento.id DESC`
+        );
+
+        return list;
+    ;}
+    async updateStatus(order_id, status){
+        const [result] = await database.raw(
+            `UPDATE pagamento SET
+             status = ?,
+             pago_em = CASE WHEN ? = "aprovado" THEN NOW() ELSE NULL END
+             WHERE pedido_id = ?`,
+             [status, status, order_id]
+        );
+        
+        return result;
+    };
+};
+
+export const PaymentRepository = new PaymentRepositoryClass();

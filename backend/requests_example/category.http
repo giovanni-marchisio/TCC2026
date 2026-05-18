@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+### Público
+### Lista de categorias disponíveis.
+GET {{baseUrl}}/categoria/
+
+### Lista de produtos desta categoria pelo nome *completo*
+GET {{baseUrl}}/categoria?name=
+
+### Lista de produtos desta categoria por id
+GET {{baseUrl}}/categoria/{{id}}
+

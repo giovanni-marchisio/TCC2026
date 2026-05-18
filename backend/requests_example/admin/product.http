@@ -1,0 +1,54 @@
+@baseUrl = http://localhost:3000/api
+@id = 1
+
+# @name login
+POST {{baseUrl}}/usuario/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin",
+    "password": "admin"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Lista de todos os produtos.
+GET {{baseUrl}}/admin/produto/
+Authorization: Bearer {{token}}
+
+### Registrar produto
+POST {{baseUrl}}/admin/produto/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "image":"example.png",
+    "name":"example",
+    "description":"example",
+    "price":"1",
+    "category":"1",
+    "stock":"1"  
+}
+
+### Deletar produto
+DELETE {{baseUrl}}/admin/produto/{{id}}
+Authorization: Bearer {{token}}
+
+### Restaurar produto
+PATCH {{baseUrl}}/admin/produto/restaurar/{{id}}
+Authorization: Bearer {{token}}
+
+### Modificar produto
+PATCH {{baseUrl}}/admin/produto/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "image":"example(2).png",
+    "name":"exampl3",
+    "description":"exampl3",
+    "price":"1",
+    "category":"1",
+    "stock":"1"  
+}
