@@ -21,7 +21,7 @@ export const paymentController = {
     },
     async findAll(request, reply){
         const { status } = request.query;
-        const payments = await paymentService.listAll(status);
+        const payments = await paymentService.findAll(status);
 
         return reply.status(200).send(
             payments

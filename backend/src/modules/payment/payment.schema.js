@@ -10,7 +10,8 @@ const paymentResponse = {
     status_pedido: { type: "string" },
     cliente:       { type: "string" }
   }
-}
+} // Foi um erro deixar o código em ingles com o banco em português!!! TO PERDIDÃOAAAAA
+// Vou arrumando aos poucos esses typos e verificando os erros nos testes.
 
 export const findPaymentByOrderSchema = {
   description: "Busca o pagamento de um pedido",
@@ -18,11 +19,11 @@ export const findPaymentByOrderSchema = {
   security: [{ bearerAuth: [] }],
   params: {
     type: "object",
-    properties: { pedido_id: { type: "integer" } }
+    properties: { order_id: { type: "integer" } }
   },
   response: {
     200: paymentResponse,
-    404: { type: "object", properties: { erro: { type: "string" } } }
+    404: { type: "object", properties: { error: { type: "string" } } }
   }
 };
 
@@ -68,7 +69,7 @@ export const updatePaymentStatusSchema = {
   security: [{ bearerAuth: [] }],
   params: {
     type: "object",
-    properties: { pedido_id: { type: "integer" } }
+    properties: { order_id: { type: "integer" } }
   },
   body: {
     type: "object",
@@ -81,6 +82,6 @@ export const updatePaymentStatusSchema = {
     }
   },
   response: {
-    200: { type: "object", properties: { mensagem: { type: "string" } } }
+    200: { type: "object", properties: { message: { type: "string" } } }
   }
 };

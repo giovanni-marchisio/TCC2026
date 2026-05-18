@@ -9,7 +9,7 @@ class PaymentRepositoryClass {
                 metodo,
                 status,
                 valor
-            ) VALUES (?, ?, "pendente", ?)`,
+            ) VALUES (?, ?, 'pendente', ?)`,
              [order_id, payment_method, value]
         );
 
@@ -30,11 +30,11 @@ class PaymentRepositoryClass {
              `SELECT
                 pagamento.*,
                 pedido.status AS status_pedido,
-                pedido.total,
+                pedido.valor_total,
                 cliente.nome AS cliente
              FROM pagamento
              JOIN pedido ON pedido.id = pagamento.pedido_id
-             JOIN cliente ON cliente.id = pagamento.cliente_id
+             JOIN cliente ON cliente.id = pedido.cliente_id
              WHERE pedido.status = ?
              ORDER BY pagamento.id DESC`,
              [status]
@@ -47,11 +47,11 @@ class PaymentRepositoryClass {
             `SELECT
                 pagamento.*,
                 pedido.status AS status_pedido,
-                pedido.total,
+                pedido.valor_total,
                 cliente.nome AS cliente
              FROM pagamento
              JOIN pedido ON pedido.id = pagamento.pedido_id
-             JOIN cliente ON cliente.id = pagamento.cliente_id
+             JOIN cliente ON cliente.id = pedido.cliente_id
              ORDER BY pagamento.id DESC`
         );
 
@@ -62,11 +62,11 @@ class PaymentRepositoryClass {
             `SELECT
                 pagamento.*,
                 pedido.status AS status_pedido,
-                pedido.total,
+                pedido.valor_total,
                 cliente.nome AS Cliente,
              FROM pagamento
              JOIN pedido ON pedido.id = pagamento.pedido_id
-             JOIN cliente ON cliente.id = pagamento.cliente_id
+             JOIN cliente ON cliente.id = pedido.cliente_id
              WHERE pagamento.status = ? AND cliente.id = ?
              ORDER BY pagamento.id DESC`,
              [status, client_id]
@@ -79,22 +79,23 @@ class PaymentRepositoryClass {
             `SELECT
                 pagamento.*,
                 pedido.status AS status_pedido,
-                pedido.total,
+                pedido.valor_total,
                 cliente.nome AS cliente
              FROM pagamento
              JOIN pedido ON pedido.id = pagamento.pedido_id
-             JOIN cliente ON cliente.id = pagamento.cliente_id
+             JOIN cliente ON cliente.id = pedido.cliente_id
              WHERE cliente.id = ?
-             ORDER BY pagamento.id DESC`
+             ORDER BY pagamento.id DESC`,
+             [client_id]
         );
 
         return list;
-    };
+    }; 
     async updateStatus(order_id, status){
         const [result] = await database.raw(
             `UPDATE pagamento SET
              status = ?,
-             pago_em = CASE WHEN ? = "aprovado" THEN NOW() ELSE NULL END
+             pago_em = CASE WHEN ? = 'aprovado' THEN NOW() ELSE NULL END
              WHERE pedido_id = ?`,
              [status, status, order_id]
         );

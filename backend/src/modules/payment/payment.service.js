@@ -18,10 +18,10 @@ export const paymentService = {
         if (!order) throw new NotFoundError("Pedido não encontrado!");
 
         if (order.cliente_id !== client.id) throw new ForbiddenError("Acesso negado!");
+        const payment = await PaymentRepository.findOrderById(order_id);
 
-        const payment = await PaymentRepository.findByOrderId(order_id);
         if (!payment) throw new NotFoundError("Pagamento não encontrado!");
-
+        
         return payment;
     },
     async list(client_id, status){
@@ -35,7 +35,8 @@ export const paymentService = {
         const validStatus = ["pendente", "aprovado", "recusado", "estornado"];
         if (!validStatus.includes(status)) throw new ValidationError("Status desconhecido!");
 
-        const payment = await PaymentRepository.findByOrderId(order_id);
+        const payment = await PaymentRepository.findOrderById(order_id);
+
         if (!payment) throw new NotFoundError("Pagamento não encontrado!");
 
         if (payment.status === status ) throw new ConflictError;

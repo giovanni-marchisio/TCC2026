@@ -27,5 +27,5 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "status": // pendente, aprovado, recusado, estornado
+    "status": "aprovado" // pendente, aprovado, recusado, estornado
 }

@@ -93,6 +93,7 @@ export const updateOrderStatusSchema = {
   security: [{ bearerAuth: [] }],
   params: {
     type: "object",
+    required: ["id"],
     properties: { id: { type: "integer" } }
   },
   body: {
@@ -101,7 +102,8 @@ export const updateOrderStatusSchema = {
     properties: {
       status: {
         type: "string",
-        enum: ["pendente", "pago", "enviado", "entregue", "cancelado"]
+        enum: ["pendente", "pago", "enviado", "entregue", "cancelado"],
+        description: "Novo status do pedido"
       }
     }
   },
