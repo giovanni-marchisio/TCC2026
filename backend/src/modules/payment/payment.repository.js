@@ -24,7 +24,25 @@ class PaymentRepositoryClass {
 
         return payment[0];
     };
-    async findAll(){
+    async findAll(status){
+        if (status) {
+            const [listStatus] = await database.raw(
+             `SELECT
+                pagamento.*,
+                pedido.status AS status_pedido,
+                pedido.total,
+                cliente.nome AS cliente
+             FROM pagamento
+             JOIN pedido ON pedido.id = pagamento.pedido_id
+             JOIN cliente ON cliente.id = pagamento.cliente_id
+             WHERE pedido.status = ?
+             ORDER BY pagamento.id DESC`,
+             [status]
+            );
+
+            return listStatus;
+        }
+
         const [list] = await database.raw(
             `SELECT
                 pagamento.*,
@@ -39,22 +57,39 @@ class PaymentRepositoryClass {
 
         return list;
     };
-    async findPendind(){
+    async findByStatus(status, client_id){
         const [list] = await database.raw(
             `SELECT
                 pagamento.*,
                 pedido.status AS status_pedido,
                 pedido.total,
-                cliente.nome AS liente,
+                cliente.nome AS Cliente,
              FROM pagamento
              JOIN pedido ON pedido.id = pagamento.pedido_id
              JOIN cliente ON cliente.id = pagamento.cliente_id
-             WHERE pagamento.status = "pendente"
+             WHERE pagamento.status = ? AND cliente.id = ?
+             ORDER BY pagamento.id DESC`,
+             [status, client_id]
+        );
+
+        return list;
+    };
+    async list(client_id){
+        const [list] = await database.raw(
+            `SELECT
+                pagamento.*,
+                pedido.status AS status_pedido,
+                pedido.total,
+                cliente.nome AS cliente
+             FROM pagamento
+             JOIN pedido ON pedido.id = pagamento.pedido_id
+             JOIN cliente ON cliente.id = pagamento.cliente_id
+             WHERE cliente.id = ?
              ORDER BY pagamento.id DESC`
         );
 
         return list;
-    ;}
+    };
     async updateStatus(order_id, status){
         const [result] = await database.raw(
             `UPDATE pagamento SET

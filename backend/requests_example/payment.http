@@ -14,5 +14,11 @@ Content-Type: application/json
 @token = {{login.response.body.token}}
 
 ### Listar pagamento por id
-GET {{baseUrl}}/{{id}}
+GET {{baseUrl}}/pagamentos/{{id}}
 Authorization: Bearer {{token}}
+
+### Listar todos os pagamentos
+GET {{baseUrl}}/pagamentos/
+
+### Listar pagamento por status
+GET {{baseUrl}}/pagamentos?status=

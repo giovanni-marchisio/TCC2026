@@ -61,8 +61,7 @@ export const userService = {
     },
     async modify(id, data){
         const { phone } = data;
-        // Ainda tô pensando no que adicionar aqui, 
-        // já que eu vou deixar a senha em outro lugar
+        // Estou fazendo os schema pro swagger e ainda não sei o que colocar aqui...
         return UserRepository.modify(id, data);
     },
     async list(){

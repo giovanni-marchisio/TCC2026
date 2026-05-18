@@ -1,12 +1,14 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import { database } from "../configs/database.js";
+import { validateEmail } from "../utils/email.js";
 
 async function createAdmin(){
     const email = process.argv[2];
     const password = process.argv[3];
     const name = process.argv[4] || "Adminstrador";
 
+    validateEmail(email);
 
     if (!email || !password){
         console.log("Dados inválidos!\nUso: node src/scripts/createAdmin.js <email> <senha> <nome>");

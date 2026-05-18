@@ -19,8 +19,9 @@ class ProductRepositoryClass {
                 descricao, 
                 preco, 
                 categoria_id, 
-                estoque
-            ) VALUES (?, ?, ?, ?, ?, ?)`,
+                estoque,
+                ativo
+            ) VALUES (?, ?, ?, ?, ?, ?, TRUE)`,
             [image, name, description, price, category, stock]
         );
 

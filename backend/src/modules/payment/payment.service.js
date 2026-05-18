@@ -24,11 +24,12 @@ export const paymentService = {
 
         return payment;
     },
-    async findAll(){
-        return PaymentRepository.findAll();
+    async list(client_id, status){
+        if (status) return PaymentRepository.findByStatus(status, client_id);
+        return PaymentRepository.list(client_id);
     },
-    async findPending(){
-        return PaymentRepository.findPending();
+    async findAll(status){
+        return PaymentRepository.findAll(status);
     },
     async updateStatus(order_id, status){
         const validStatus = ["pendente", "aprovado", "recusado", "estornado"];

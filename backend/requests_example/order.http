@@ -27,7 +27,7 @@ Content-Type: application/json
             "quantity": "1"
         }
     ],
-    "payment_method": "pix" // cartão, boleto
+    "payment_method": "pix" // cartao, boleto
 }
 
 ### Listar pedidos

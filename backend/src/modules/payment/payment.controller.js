@@ -10,15 +10,18 @@ export const paymentController = {
             payment
         )
     },
-    async findAll(request, reply){
-        const payments = await paymentService.findAll();
+    async list(request, reply){
+        const { client_id } = request.user;
+        const { status } = request.query;
+        const payments = await paymentService.list(client_id, status);
 
         return reply.status(200).send(
             payments
         )
     },
-    async findPending(request, reply){
-        const payments = await paymentService.findPending();
+    async findAll(request, reply){
+        const { status } = request.query;
+        const payments = await paymentService.listAll(status);
 
         return reply.status(200).send(
             payments

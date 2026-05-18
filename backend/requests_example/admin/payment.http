@@ -6,18 +6,19 @@ POST {{baseUrl}}/usuario/login
 Content-Type: application/json
 
 {
-    "email": "admin@admin",
+    "email": "admin@admin.com",
     "password": "admin"
 }
 
+###
 @token = {{login.response.body.token}}
 
 ### Listar todos os pagamentos
 GET {{baseUrl}}/admin/pagamentos
 Authorization: Bearer {{token}}
 
-### Listar todos os pagamentos pendentes
-GET {{baseUrl}}/admin/pagamentos/pendente
+### Listar todos os pagamentos por status
+GET {{baseUrl}}/admin/pagamentos?status=
 Authorization: Bearer {{token}}
 
 ### Modificar status do pagamento
