@@ -59,7 +59,7 @@ CREATE TABLE categoria (
 
 CREATE TABLE produto (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    imagem VARCHAR(255) NOT NULL,
+    imagem VARCHAR(255) DEFAULT NULL,
     nome VARCHAR(100) NOT NULL,
     descricao VARCHAR(255),
     preco INT NOT NULL,

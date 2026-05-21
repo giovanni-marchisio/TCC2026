@@ -3,7 +3,6 @@ import { database } from "../../configs/database";
 class ProductRepositoryClass {
     async register(data){
         const {
-            image,
             name,
             description,
             price,
@@ -14,15 +13,14 @@ class ProductRepositoryClass {
         const [product] = await database.raw(
             `INSERT INTO produto 
             (
-                imagem, 
                 nome, 
                 descricao, 
                 preco, 
                 categoria_id, 
                 estoque,
                 ativo
-            ) VALUES (?, ?, ?, ?, ?, ?, TRUE)`,
-            [image, name, description, price, category, stock]
+            ) VALUES (?, ?, ?, ?, ?, TRUE)`,
+            [name, description, price, category, stock]
         );
 
         return { 
@@ -55,7 +53,6 @@ class ProductRepositoryClass {
     };
     async modify(id, data){
         const {
-            image,
             name,
             description,
             price,
@@ -65,14 +62,13 @@ class ProductRepositoryClass {
 
         const [product] = await database.raw(
             `UPDATE produto SET
-                imagem = ?,
                 nome = ?,
                 descricao = ?,
                 preco = ?,
                 categoria_id = ?,
                 estoque = ?
              WHERE id = ?`,
-            [image, name, description, price, category, stock, id]
+            [name, description, price, category, stock, id]
         );
 
         return {
@@ -175,6 +171,18 @@ class ProductRepositoryClass {
             affectedRows: product.affectedRows
         }
     };
+    async updateImage(id, image){
+        const [product] = await database.raw(
+            `UPDATE produto SET
+                imagem = ?
+             WHERE id = ?`,
+             [image, id]
+        );
+
+        return {
+            affectedRows: product.affectedRows
+        }
+    }
 }
 
 export const ProductRepository = new ProductRepositoryClass();

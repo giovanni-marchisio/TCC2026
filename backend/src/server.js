@@ -4,6 +4,9 @@ import "./configs/env";
 import cors from "@fastify/cors";
 import fastify from "fastify";
 import fjwt from "@fastify/jwt";
+import multipart from "@fastify/multipart";
+import staticFiles from "@fastify/static";
+import path from 'path';
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { userRoutes } from "./modules/user/user.routes";
@@ -26,6 +29,17 @@ server.register(cors, {
     origin: [process.env.FRONT_URL, process.env.LOCAL_TEST].filter(Boolean),
     method: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-type", "Authorization"]
+});
+
+server.register(multipart, {
+  limits: {
+    fileSize: 3 * 1024 * 1024 // 3MB
+  }
+});
+
+server.register(staticFiles, {
+  root: path.join(process.cwd(), 'uploads'),
+  prefix: '/uploads'
 });
 
 server.setErrorHandler((error, request, reply) => {

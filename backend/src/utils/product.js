@@ -1,14 +1,20 @@
 import { ProductRepository } from "../modules/product/product.repository";
+import { categoryExist } from "./category";
+import { 
+    ValidationError,
+    ConflictError,
+    NotFoundError
+} from "./errors";
 
-import { ValidationError } from "./errors";
+export async function validateProduct(data){
 
-export function validateProduct(data){
+    if (!data) throw new NotFoundError;
+
     const {
         name,
         price,
         stock,
         category,
-        image
     } = data;
 
     if (!name || name.trim() === "") throw new ValidationError("Nome do produto é obrigatório!");
@@ -16,12 +22,10 @@ export function validateProduct(data){
     if (stock < 0) throw new ValidationError("Quantidade inválida no estoque");
     if (!category) throw new ValidationError("Categoria é obrigatória!");
     
-    if (image){
-        const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-        const extension = image.slice(image.lastIndexOf('.')).toLowerCase();
-
-        if (!allowedExtensions.includes(extension)) throw new ValidationError("Formato de imagem inválido!");
-    }
+    if (await productExist({ name: name })) throw new ConflictError("Produto já registrado!");
+    if (!await categoryExist({ id: category })) throw new NotFoundError("Categoria não existe!");
+    
+    return true;
 };
 
 export async function productExist({id, name} = {}){

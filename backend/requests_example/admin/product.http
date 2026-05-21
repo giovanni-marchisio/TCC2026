@@ -23,13 +23,24 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "image":"example.png",
     "name":"example",
     "description":"example",
     "price":"1",
     "category":"1",
     "stock":"1"  
 }
+
+### Adicionando imagem
+PATCH {{baseUrl}}/admin/produto/{{id}}/imagem
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./image.jpg
+------WebKitFormBoundary--
 
 ### Deletar produto
 DELETE {{baseUrl}}/admin/produto/{{id}}
@@ -45,7 +56,6 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "image":"example(2).png",
     "name":"exampl3",
     "description":"exampl3",
     "price":"1",

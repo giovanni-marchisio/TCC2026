@@ -7,7 +7,6 @@ const productBody = {
     stock:      { type: "integer", minimum: 0 },
     category: { type: "integer" },
     description:    { type: "string" },
-    image:       { type: "string" }
   }
 };
 
@@ -78,7 +77,7 @@ export const createSchema = {
   description: "Cria um novo produto",
   tags: ["Produtos"],
   security: [{ bearerAuth: [] }],
-  body: productBody,
+   body: productBody,
   response: {
     201: {
       type: 'object',

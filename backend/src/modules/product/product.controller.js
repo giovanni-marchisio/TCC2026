@@ -1,3 +1,4 @@
+import { uploadTemp } from "../../utils/file";
 import { productService } from "./product.service";
 
 export const productController = {
@@ -33,7 +34,8 @@ export const productController = {
     },
     async modify(request, reply){
         const { id } = request.params;
-        const { data } = request.body;
+        const data  = request.body;
+        console.log(request.body);
         const { affectedRows } = await productService.modify(id, data);
 
         return reply.status(200).send({
@@ -65,4 +67,24 @@ export const productController = {
             product
         );
     },
+    async updateImage(request, reply){
+        const { id } = request.params;
+        const parts = request.parts();
+        let imagePath, imageName = null;
+
+        for await (const part of parts){
+            if (part.type === "file"){
+                ({
+                    tempName: imageName,
+                    filePath: imagePath
+                } = await uploadTemp(part.file, part.filename));
+            }
+        };
+
+        const { affectedRows } = await productService.updateImage(id, imageName, imagePath);
+        return reply.status(201).send({
+            message: "Imagem atualizada",
+            affectedRows: affectedRows
+        })
+    }
 }
