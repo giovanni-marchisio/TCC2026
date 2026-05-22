@@ -1,3 +1,4 @@
+import { uploadTemp } from "../../utils/file";
 import { categoryService } from "./category.service";
 
 export const categoryController = {
@@ -62,4 +63,25 @@ export const categoryController = {
             response
         );
     },
+    async updateImage(request, reply){
+        const { id } = request.params;
+        const parts = request.parts();
+        let imagePath = null;
+        let imageName = null;
+
+        for await (const part of parts){
+            if (part.type === "file"){
+                ({
+                    imageName,
+                    imagePath
+                } = await uploadTemp(part.file, part.filename));
+            }
+        };
+        
+        const { affectedRows } = await categoryService.updateImage(id, imageName, imagePath);
+        return reply.status(201).send({
+            message: "Imagem atualizada",
+            affectedRows: affectedRows
+        })        
+    }
 }

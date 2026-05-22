@@ -69,7 +69,7 @@ export const findByIdSchema = {
   },
   response: {
     200: productResponse,
-    404: { type: "object", properties: { erro: { type: "string" } } }
+    404: { type: "object", properties: { errorr: { type: "string" } } }
   }
 };
 
@@ -100,8 +100,43 @@ export const updateSchema = {
   body: productBody,
   response: {
     200: { type: "object", properties: { message: { type: "string" } } },
-    404: { type: 'object', properties: { erro: { type: 'string' } } }
+    404: { type: 'object', properties: { error: { type: 'string' } } }
   }
+};
+
+export const addImageSchema = {
+  description: "Adiciona imagem ao produto",
+  tags: ["Produtos"],
+  security: [{ bearerAuth: [] }],
+  consumes: ["multipart/form-data"],
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "integer"
+      }
+    }
+  },
+response: {
+  200: {
+    type: "object",
+    properties: {
+      message: {
+        type: "string"
+      },
+
+      image: {
+        type: "object",
+        properties: {
+          large: { type: "string" },
+          medium: { type: "string" },
+          thumb: { type: "string" }
+        }
+      }
+    }
+  }
+}, 404: { type: 'object', properties: { errorr: { type: 'string' } } }
 };
 
 export const restoreSchema = {
@@ -114,7 +149,7 @@ export const restoreSchema = {
   },
   response: {
     200: { type: "object", properties: { message: { type: "string" } } },
-    404: { type: "object", properties: { erro: { type: "string" } } }
+    404: { type: "object", properties: { error: { type: "string" } } }
   }
 };
 

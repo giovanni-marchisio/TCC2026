@@ -47,14 +47,69 @@ export const productService = {
         return ProductRepository.findById(id);
     },
     async updateImage(id, image, filePath){
-        if (!await productExist({ id: id })) throw new NotFoundError("Produto não existe!");
-        // Preciso pensar em como verificar se o produto já tem imagem
-        // e como deletar sem dar problema no front...
-        if (filePath === process.env.TEMP_FOLDER + image) {
-            const productFolder = `${process.env.PUBLIC_ASSETS}products/`;
-            await moveFile(filePath, productFolder, image)
+        if (!await productExist({ id: id })) {
+            throw new NotFoundError("Produto não existe!");
+            return;
+        }
+        const product = await ProductRepository.findById(id);
+        const images = {
+            large: {
+                filename: image.large,
+                filepath: filePath.large
+            },
+            medium: {
+                filename: image.medium,
+                filepath: filePath.medium
+            },
+            thumb: {
+                filename: image.thumb,
+                filepath: filePath.thumb
+            }
         };
 
-        return ProductRepository.updateImage(id, image);
+        if (filePath && image) {
+            const productFolder = `${process.env.PUBLIC_ASSETS}products/`;
+            await Promise.all(
+                Object.values(images).map(
+                    async (img) => {
+                        await moveFile(
+                            img.filepath,
+                            productFolder,
+                            img.filename
+                        )
+                    }
+                )
+            );
+
+            if (product.imagem && product.imagem_medium && product.imagem_thumb){
+                const oldImages = {
+                    large: {
+                        filepath: `${productFolder}${product.imagem}`
+                    },
+                    medium: {
+                        filepath: `${productFolder}${product.imagem_medium}`
+                    },
+                    thumb: {
+                        filepath: `${productFolder}${product.imagem_thumb}`
+                    }
+                };
+                // eu poderia talvez modificar as funções para aceitar objeto e fazer esse processo
+                // fora do service...
+                await Promise.all(
+                    Object.values(oldImages).map(
+                        async (img) => {
+                            await deleteFile(img.filepath);
+                        }
+                    )
+                );
+            }
+        };
+
+        return ProductRepository.updateImage(
+            id, 
+            images.large.filename, 
+            images.thumb.filename, 
+            images.medium.filename
+        );
     }
 }

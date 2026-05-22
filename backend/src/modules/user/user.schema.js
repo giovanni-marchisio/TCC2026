@@ -17,7 +17,7 @@ export const registerSchema = {
   tags: ["Usuários"],
   body: {
     type: "object",
-    required: ["nome", "email", "senha", "telefone", "cpf"],
+    required: ["name", "email", "password", "phone", "cpf"],
     properties: {
       name:     { type: "string", minLength: 3 },
       email:    { type: "string", format: "email" },

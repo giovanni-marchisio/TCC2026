@@ -82,6 +82,7 @@ class ProductRepositoryClass {
                 produto.id AS id,
                 produto.nome,
                 produto.imagem,
+                produto.imagem_thumb,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -100,6 +101,8 @@ class ProductRepositoryClass {
                 produto.id AS id,
                 produto.nome,
                 produto.imagem,
+                produto.imagem_medium,
+                produto.imagem_thumb,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -118,6 +121,8 @@ class ProductRepositoryClass {
                 produto.id AS id,
                 produto.nome,
                 produto.imagem,
+                produto.imagem_medium,
+                produto.imagem_thumb,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -147,6 +152,7 @@ class ProductRepositoryClass {
                 produto.id AS id,
                 produto.nome,
                 produto.imagem,
+                produto.imagem_thumb,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -171,15 +177,18 @@ class ProductRepositoryClass {
             affectedRows: product.affectedRows
         }
     };
-    async updateImage(id, image){
+    async updateImage(id, image, image_thumb, image_medium){
         const [product] = await database.raw(
             `UPDATE produto SET
-                imagem = ?
+                imagem = ?,
+                imagem_thumb = ?,
+                imagem_medium = ?
              WHERE id = ?`,
-             [image, id]
+             [image, image_thumb, image_medium, id]
         );
 
         return {
+            id: id,
             affectedRows: product.affectedRows
         }
     }

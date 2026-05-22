@@ -53,19 +53,22 @@ CREATE TABLE endereco(
 CREATE TABLE categoria (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) UNIQUE,
-    imagem VARCHAR(255) NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE
+    ativo BOOLEAN DEFAULT TRUE,
+    imagem VARCHAR(255) DEFAULT NULL,
+    imagem_thumb VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE produto (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    imagem VARCHAR(255) DEFAULT NULL,
     nome VARCHAR(100) NOT NULL,
     descricao VARCHAR(255),
     preco INT NOT NULL,
     categoria_id INT NOT NULL,
     estoque INT NOT NULL,
     ativo BOOLEAN DEFAULT TRUE,
+    imagem VARCHAR(255) DEFAULT NULL,
+    imagem_thumb VARCHAR(255) DEFAULT NULL,
+    imagem_medium VARCHAR(255) DEFAULT NULL,
 
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );

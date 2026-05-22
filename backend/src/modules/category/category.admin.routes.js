@@ -9,4 +9,5 @@ export async function categoryAdminRoutes(server){
     server.delete("/:id", categoryController.delete);
     server.patch("/restaurar/:id", categoryController.restore);
     server.patch("/:id", categoryController.modify);
+    server.patch("/:id/imagem", categoryController.updateImage);
 }

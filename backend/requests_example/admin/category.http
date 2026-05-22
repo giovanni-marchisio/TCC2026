@@ -23,9 +23,20 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name":"example category",
-    "image": "category.png"
+    "name":"example category"
 }
+
+### Adicionando imagem
+PATCH {{baseUrl}}/admin/categoria/{{id}}/imagem
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./image.jpg
+------WebKitFormBoundary--
 
 ### Deletar categoria
 DELETE  {{baseUrl}}/admin/categoria/{{id}}
@@ -41,6 +52,5 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name":"example",
-    "image": "example.png"
+    "name":"example"
 }

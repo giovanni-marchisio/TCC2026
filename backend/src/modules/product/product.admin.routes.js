@@ -6,7 +6,8 @@ import {
     updateSchema, 
     deleteSchema, 
     restoreSchema, 
-    listAllSchema 
+    listAllSchema, 
+    addImageSchema
 } from "./product.schema";
 
 export async function productAdminRoutes(server){
@@ -17,5 +18,5 @@ export async function productAdminRoutes(server){
     server.delete("/:id", { schema: deleteSchema }, productController.delete);
     server.patch("/restaurar/:id", { schema: restoreSchema }, productController.restore);
     server.patch("/:id", { schema: updateSchema }, productController.modify);
-    server.patch("/:id/imagem", productController.updateImage);
+    server.patch("/:id/imagem", { schema: addImageSchema }, productController.updateImage);
 };

@@ -1,8 +1,8 @@
+import sharp from "sharp";
 import { extname } from "node:path";
 import { randomUUID } from "node:crypto";
 import { rename, unlink } from "node:fs/promises";
 import { createWriteStream } from "node:fs";
-import { pipeline } from "node:stream/promises";
 
 const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
@@ -22,33 +22,45 @@ export async function deleteFile(filePath){
         console.log("Arquivo deletado.")
     });
 };
-// Talvez eu tire essa função aqui... 
-// fiz ela antes de pensar em como tudo iria funcionar (ainda estou pensando como resolver tudo)
-export async function uploadFile(file, fileName, filePath){
-    const ext = extname(fileName);
-    const upload = randomUUID() + ext;
-    const fullPath = filePath + upload;
-
-    if (!allowedExtensions.includes(ext)) throw new ValidationError("Formato de imagem inválido!");
-
-    await pipeline(file, createWriteStream(fullPath));
-
-    return {
-        image: upload
-    };
-};
 
 export async function uploadTemp(file, fileName){
     const ext = extname(fileName);
-    const tempName = randomUUID() + ext;
-    const fullPath = `${process.env.TEMP_FOLDER}${tempName}`;
+    const tempName = randomUUID();
+    const fullPath = `${process.env.TEMP_FOLDER}`;
+    const imageName = {
+        large: `${tempName}-large${ext}`,
+        medium: `${tempName}-medium${ext}`,
+        thumb: `${tempName}-thumb${ext}`
+    };
+    const imagePath = {
+        large: `${fullPath}${tempName}-large${ext}`,
+        medium: `${fullPath}${tempName}-medium${ext}`,
+        thumb: `${fullPath}${tempName}-thumb${ext}`
+    };
 
     if (!allowedExtensions.includes(ext)) throw new ValidationError("Formato de imagem inválido!");
 
-    await pipeline(file, createWriteStream(fullPath));
+    const parts = [];
+    for await (const part of file){
+        parts.push(part);
+    };
+
+    const buffer = Buffer.concat(parts);
+
+    await sharp(buffer)
+        .resize(800, 800, { fit: "inside" })
+        .toFile(imagePath.large);
+
+    await sharp(buffer)
+        .resize(400, 400, { fit: "inside" })
+        .toFile(imagePath.medium);
+
+    await sharp(buffer)
+        .resize(100, 100, { fit: "inside" })
+        .toFile(imagePath.thumb);
 
     return {
-        tempName,
-        filePath: fullPath
+        imageName,
+        imagePath
     };
 };

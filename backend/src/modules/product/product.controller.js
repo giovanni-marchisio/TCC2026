@@ -70,13 +70,14 @@ export const productController = {
     async updateImage(request, reply){
         const { id } = request.params;
         const parts = request.parts();
-        let imagePath, imageName = null;
+        let imagePath = null; // pelo visto fica undefined do jeito que eu tinha declarado.
+        let imageName = null;
 
         for await (const part of parts){
             if (part.type === "file"){
                 ({
-                    tempName: imageName,
-                    filePath: imagePath
+                    imageName,
+                    imagePath
                 } = await uploadTemp(part.file, part.filename));
             }
         };

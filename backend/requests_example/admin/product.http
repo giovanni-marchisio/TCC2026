@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@id = 1
+@id = 2
 
 # @name login
 POST {{baseUrl}}/usuario/login

@@ -5,6 +5,7 @@ import {
     NotFoundError, 
     ConflictError 
 } from "../../utils/errors";
+import { deleteFile, moveFile } from "../../utils/file";
 
 export const categoryService = {
     async register(data){
@@ -44,9 +45,65 @@ export const categoryService = {
         return list;        
     },
     async findById(id){
-        const category = await CategoryRepository.findById(id);
-        if (!category) throw new NotFoundError("Categoria não encontrada!");
-        
+        if (!await categoryExist({ id: id })) throw new NotFoundError("Categoria não encontrada!");
+
         return category;
+    },
+    async updateImage(id, image, filePath){
+        if (!await categoryExist({ id: id })) {
+            throw new NotFoundError("Categoria não encontrada!");
+            return;
+        }
+        const category = await CategoryRepository.findById(id);
+        const images = {
+            medium: {
+                filename: image.medium,
+                filepath: filePath.medium
+            },
+            thumb: {
+                filename: image.thumb,
+                filepath: filePath.thumb
+            }
+        };
+
+        if (filePath && image) {
+            const categoryFolder = `${process.env.PUBLIC_ASSETS}categories/`;
+            await deleteFile(filePath.large);
+            await Promise.all(
+                Object.values(images).map(
+                    async (img) => {
+                        await moveFile(
+                            img.filepath,
+                            categoryFolder,
+                            img.filename
+                        )
+                    }
+                )
+            );
+            
+            if (category.imagem && category.imagem_thumb){
+                const oldImages = {
+                    medium: {
+                        filepath: `${categoryFolder}${category.imagem}`
+                    },
+                    thumb: {
+                        filepath: `${categoryFolder}${category.imagem_thumb}`
+                    }
+                };
+                
+                await Promise.all(
+                    Object.values(oldImages).map(
+                        async (img) => {
+                            await deleteFile(img.filepath);
+                        }
+                    )
+                );                                
+            }
+        }
+        return CategoryRepository.updateImage(
+            id, 
+            images.medium.filename,
+            images.thumb.filename
+        );
     }
 }

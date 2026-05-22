@@ -2,18 +2,14 @@ import { database } from "../../configs/database";
 
 class CategoryRepositoryClass {
     async register(data){
-        const {
-            name,
-            image
-        } = data;
+        const { name } = data;
 
         const [category] = await database.raw(
             `INSERT INTO categoria 
             (
-                nome,
-                imagem
-            ) VALUES (?, ?)`, 
-            [name, image]
+                nome
+            ) VALUES (?)`, 
+            [name]
         );
 
         return { category_id: category.insertId };
@@ -63,17 +59,13 @@ class CategoryRepositoryClass {
         };
     };
     async modify(id, data){
-        const {
-            name,
-            image
-        } = data;
+        const { name } = data;
 
         const [category] = await database.raw(
             `UPDATE categoria SET
-                nome = ?,
-                imagem = ?
+                nome = ?
              WHERE id = ?`,
-            [name, image, id]
+            [name, id]
         );
 
         return {
@@ -102,7 +94,7 @@ class CategoryRepositoryClass {
             `SELECT
                 produto.id AS id,
                 produto.nome,
-                produto.imagem,
+                produto.imagem_thumb,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -142,6 +134,20 @@ class CategoryRepositoryClass {
         );
         
         return list;
+    };
+    async updateImage(id, image, image_thumb){
+        const [category] = await database.raw(
+            `UPDATE categoria SET
+                imagem = ?,
+                imagem_thumb = ?
+             WHERE id = ?`,
+             [image, image_thumb, id]       
+        );
+
+        return {
+            id: id,
+            affectedRows: category.affectedRows
+        };
     }
 }
 
