@@ -7,6 +7,8 @@ import {
 } from "../../utils/errors";
 import { deleteFile, moveFile } from "../../utils/file";
 
+const baseUrl = `${process.env.FRONTEND_URL}${process.env.PUBLIC_ASSETS}`;
+
 export const categoryService = {
     async register(data){
         const { name } = data;
@@ -31,23 +33,78 @@ export const categoryService = {
         return CategoryRepository.modify(id, data);
     },
     async list(name){
-        if (name) return CategoryRepository.searchByName(name);
+        if (name) {
+            const list = await CategoryRepository.searchByName(name);
+
+            return list.map(({ 
+            id, 
+            nome, 
+            imagem, 
+            imagem_thumb }) => ({
+            id,
+            name: nome,
+            image: `${baseUrl}categories/${imagem}`,
+            thumbnail: `${baseUrl}categories/${imagem_thumb}`
+        }));  
+        }
         
         const list = await CategoryRepository.list();
         if (!list) throw new NotFoundError;
 
-        return list;
+        return list.map(({ 
+            id, 
+            nome, 
+            imagem, 
+            imagem_thumb }) => ({
+            id,
+            name: nome,
+            image: `${baseUrl}categories/${imagem}`,
+            thumbnail: `${baseUrl}categories/${imagem_thumb}`
+        }));  
     },
     async listAll(){
         const list = await CategoryRepository.listAll();
         if (!list) throw new NotFoundError;
-
-        return list;        
-    },
-    async findById(id){
+        
+        return list.map(({ 
+            id, 
+            nome, 
+            ativo, 
+            imagem, 
+            imagem_thumb }) => ({
+            id,
+            name: nome,
+            active: ativo,
+            image: `${baseUrl}categories/${imagem}`,
+            thumbnail: `${baseUrl}categories/${imagem_thumb}`
+        }));    
+    }, // Acho que essa função foi um erro.... mas agora vai ficar aqui.
+    async listProductsByCategoryId(id){
         if (!await categoryExist({ id: id })) throw new NotFoundError("Categoria não encontrada!");
-
-        return category;
+        const list = await CategoryRepository.listProductsByCategoryId(id);
+        
+        return list.map(({
+          id,
+          nome,
+          imagem_thumb,
+          imagem,
+          imagem_medium,
+          descricao,
+          preco,
+          categoria,
+          estoque,
+          ativo}) => ({
+          id,
+          name: nome,
+          thumbnail: `${baseUrl}products/${imagem_thumb}`,
+          image: `${baseUrl}products/${imagem}`,
+          image_medium:`${baseUrl}products/${imagem_medium}`,
+          description: descricao,
+          price: preco,
+          category_name: categoria,
+          stock: estoque,
+          active: ativo
+          }));
     },
     async updateImage(id, image, filePath){
         if (!await categoryExist({ id: id })) {

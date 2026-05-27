@@ -7,7 +7,6 @@ class UserRepositoryClass {
             email,
             password,
             phone,
-            cpf
         } = data;
 
         return database.transaction(async (db) => {
@@ -29,10 +28,9 @@ class UserRepositoryClass {
                 (
                     usuario_id,
                     nome,
-                    telefone,
-                    cpf
-                ) VALUES (?, ?, ?, ?)`,
-                [user_id, name, phone, cpf]
+                    telefone
+                ) VALUES (?, ?, ?)`,
+                [user_id, name, phone]
             );
 
             return {
@@ -88,7 +86,6 @@ class UserRepositoryClass {
                 usuario.ativo,
                 cliente.nome,
                 cliente.telefone,
-                cliente.cpf,
                 endereco.apelido,
                 endereco.complemento,
                 endereco.logradouro,
@@ -107,12 +104,11 @@ class UserRepositoryClass {
     async findById(id){
         const [info] = await database.raw(
             `SELECT
-                usuario.id,
+                cliente.id,
                 usuario.email,
                 usuario.data_cadastro,
                 cliente.nome,
                 cliente.telefone,
-                cliente.cpf,
                 endereco.apelido,
                 endereco.complemento,
                 endereco.logradouro,
@@ -144,16 +140,6 @@ class UserRepositoryClass {
              INNER JOIN cliente ON cliente.usuario_id = usuario.id
              WHERE usuario.email = ?`,
             [email]
-        );
-
-        return user[0];
-    };
-    async findByCpf(cpf){
-        const [user] = await database.raw(
-            `SELECT id 
-             FROM cliente
-             WHERE cpf = ?`,
-            [cpf]
         );
 
         return user[0];

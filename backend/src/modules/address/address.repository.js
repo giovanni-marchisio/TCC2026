@@ -4,7 +4,7 @@ class AddressRepositoryClass {
     async register(user_id, data){
         const {
             label = null,
-            addressLine2 = null,
+            complement = null,
             street,
             streetNumber,
             neighborhood,
@@ -30,7 +30,7 @@ class AddressRepositoryClass {
                 [
                 user_id, 
                 label, 
-                addressLine2, 
+                complement, 
                 street, 
                 streetNumber, 
                 neighborhood,
@@ -74,7 +74,7 @@ class AddressRepositoryClass {
     async modify(id, data){
         const {
             label,
-            addressLine2,
+            complement,
             street,
             streetNumber,
             neighborhood,
@@ -104,7 +104,7 @@ class AddressRepositoryClass {
              [user_id]
         );
 
-        return list;
+        return list ?? [];
     }
     async findById(id){
         const [address] = await database.raw(
@@ -113,7 +113,20 @@ class AddressRepositoryClass {
              [id]
         );
 
-        return address[0];
+        if (!address[0]) return null;
+
+        return {
+            id: id,
+            client_id: address[0].cliente_id,
+            label: address[0].apelido,
+            complement: address[0].complemento,
+            street: address[0].logradouro,
+            streetNumber: address[0].numero,
+            neighborhood: address[0].bairro,
+            city: address[0].cidade,
+            state: address[0].uf,
+            postalCode: address[0].cep
+        };
     }
     async setMain(user_id, id){
         return database.raw(async (db) => {

@@ -19,7 +19,6 @@ CREATE TABLE cliente (
     usuario_id INT UNIQUE,
     nome VARCHAR(100) NOT NULL,
     telefone VARCHAR(20),
-    cpf VARCHAR(14) NOT NULL UNIQUE,
 
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
@@ -77,13 +76,20 @@ CREATE TABLE produto (
 CREATE TABLE pedido (
     id  INT PRIMARY KEY AUTO_INCREMENT,
     cliente_id INT NOT NULL,
-    endereco_id INT NOT NULL,
     status ENUM('pendente', 'pago', 'enviado', 'entregue', 'cancelado'),
     data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
     valor_total INT NOT NULL,
 
-    FOREIGN KEY (cliente_id) REFERENCES cliente(id),
-    FOREIGN KEY (endereco_id) REFERENCES endereco(id)
+    complemento VARCHAR(20),
+    logradouro VARCHAR(150),
+    numero VARCHAR(100),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    uf CHAR(2),
+    cep CHAR(9),
+
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id)
+
 );
 
 CREATE TABLE pedido_produto (

@@ -3,12 +3,14 @@ import { OrderRepository } from "./order.repository";
 import { PaymentRepository } from "../payment/payment.repository";
 import { ProductRepository } from "../product/product.repository";
 import { UserRepository } from "../user/user.repository";
+import { AddressRepository } from "../address/address.repository";
 
 import { 
     ForbiddenError,
     NotFoundError, 
     ValidationError 
 } from "../../utils/errors";
+import { verifyAddress } from "../../utils/address";
 
 export const orderService = {
     async create(user_id, data){
@@ -20,6 +22,10 @@ export const orderService = {
 
         const client = await UserRepository.findClientByUserId(user_id);
         if (!client) throw new NotFoundError("Cliente não encontrado!");
+
+        const address = await AddressRepository.findById(address_id);
+        await verifyAddress(user_id, address_id);
+        if (!address) throw new NotFoundError("Endereço desconhecido!");
 
         let total = 0;
         const validProducts = [];
@@ -35,7 +41,7 @@ export const orderService = {
         };
 
         return database.transaction(async (db) => {
-            const orderResult = await OrderRepository.create(client.id, address_id, total, db);
+            const orderResult = await OrderRepository.create(client.id, address, total, db);
             const orderId = orderResult.insertId;
 
             for (const item of validProducts){

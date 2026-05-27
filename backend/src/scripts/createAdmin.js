@@ -27,8 +27,8 @@ async function createAdmin(){
 
         await bd.raw(
             `INSERT INTO cliente
-            (usuario_id, nome, telefone, cpf)
-            VALUES(?, ?, '00000000000', '00000000000')`,
+            (usuario_id, nome, telefone)
+            VALUES(?, ?, '00000000000')`,
             [user.insertId, name]
         );
     });

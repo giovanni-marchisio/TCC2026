@@ -20,8 +20,7 @@ Content-Type: application/json
     "name": "John Doe",
     "email": "johndoe@email.com",
     "password": "password",
-    "phone":"1599999999",
-    "cpf": "12345678911"
+    "phone":"1599999999"
 }
 
 ### Perfil

@@ -79,7 +79,7 @@ class CategoryRepositoryClass {
              WHERE ativo = TRUE`
         );
 
-        return list;
+        return list ?? [];
     };
     async listAll(){
         const [list] = await database.raw(
@@ -87,25 +87,16 @@ class CategoryRepositoryClass {
              FROM categoria`
         );
 
-        return list;
+        return list ?? [];
     };
     async findById(id){
-        const [list] = await database.raw(
-            `SELECT
-                produto.id AS id,
-                produto.nome,
-                produto.imagem_thumb,
-                produto.descricao,
-                produto.preco,
-                categoria.nome as categoria,
-                produto.estoque,
-                produto.ativo
-             FROM produto
-             INNER JOIN categoria ON categoria.id = produto.categoria_id
-             WHERE categoria.id = ? AND produto.ativo = TRUE`,
+        const [category] = await database.raw(
+            `SELECT * FROM categoria
+            WHERE id = ?`,
             [id]
         );
-        return list;
+
+        return category[0];
     };
     async findByName(name){
         const [category] = await database.raw(
@@ -117,11 +108,22 @@ class CategoryRepositoryClass {
         return category[0];
     };
     async searchByName(name){
+        const [category] = await database.raw(
+            `SELECT * FROM categoria
+            WHERE nome LIKE ?`,
+            [`%${name}%`]
+        );
+
+        return category;
+    };
+    async listProductsByCategoryId(id){
         const [list] = await database.raw(
             `SELECT
                 produto.id AS id,
                 produto.nome,
+                produto.imagem_thumb,
                 produto.imagem,
+                produto.imagem_medium,
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
@@ -129,11 +131,11 @@ class CategoryRepositoryClass {
                 produto.ativo
             FROM produto
             INNER JOIN categoria ON categoria.id = produto.categoria_id
-            WHERE categoria.nome = ? AND produto.ativo = TRUE`,
-            [name]
+            WHERE categoria.id = ? AND produto.ativo = TRUE`,
+            [id]
         );
         
-        return list;
+        return list ?? [];
     };
     async updateImage(id, image, image_thumb){
         const [category] = await database.raw(

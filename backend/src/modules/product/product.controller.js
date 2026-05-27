@@ -35,7 +35,7 @@ export const productController = {
     async modify(request, reply){
         const { id } = request.params;
         const data  = request.body;
-        console.log(request.body);
+
         const { affectedRows } = await productService.modify(id, data);
 
         return reply.status(200).send({

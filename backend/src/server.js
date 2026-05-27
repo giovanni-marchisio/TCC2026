@@ -26,7 +26,7 @@ import { paymentAdminRoutes } from "./modules/payment/payment.admin.routes";
 const server = fastify();
 
 server.register(cors, {
-    origin: [process.env.FRONT_URL, process.env.LOCAL_TEST].filter(Boolean),
+    origin: [process.env.FRONTEND_URL, process.env.LOCAL_TEST].filter(Boolean),
     method: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-type", "Authorization"]
 });
@@ -34,12 +34,12 @@ server.register(cors, {
 server.register(multipart, {
   limits: {
     fileSize: 3 * 1024 * 1024 // 3MB
-  }
+  },
 });
 
 server.register(staticFiles, {
-  root: path.join(process.cwd(), 'uploads'),
-  prefix: '/uploads'
+  root: path.join(process.cwd(), 'public_assets'),
+  prefix: '/public_assets'
 });
 
 server.setErrorHandler((error, request, reply) => {

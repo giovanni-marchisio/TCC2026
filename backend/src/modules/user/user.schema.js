@@ -3,27 +3,25 @@ const userResponse = {
   properties: {
     id:            { type: "integer" },
     email:         { type: "string" },
-    perfil:        { type: "string" },
-    nome:          { type: "string" },
-    telefone:      { type: "string" },
-    cpf:           { type: "string" },
-    data_cadastro: { type: "string" },
-    ativo:         { type: "boolean" }
+    type:        { type: "string" },
+    name:          { type: "string" },
+    phone:      { type: "string" },
+    created_at: { type: "string" },
+    active:         { type: "boolean" }
   }
-}
+};
 
 export const registerSchema = {
   description: "Cadastra um novo usuário",
   tags: ["Usuários"],
   body: {
     type: "object",
-    required: ["name", "email", "password", "phone", "cpf"],
+    required: ["name", "email", "password", "phone"],
     properties: {
       name:     { type: "string", minLength: 3 },
       email:    { type: "string", format: "email" },
       password:    { type: "string", minLength: 6 },
       phone: { type: "string" },
-      cpf:      { type: "string" }
     }
   },
   response: {
@@ -35,7 +33,35 @@ export const registerSchema = {
       }
     }
   }
-}
+};
+
+export const deleteSchema = {
+  description: "Deleta o usuário",
+  tags: ["Usuários"],
+  security: [{ bearerAuth: [] }],
+  params: {
+    type: "object",
+    properties: { id: { type: "integer" } }
+  },
+   response: {
+    200: { type: "object", properties: { message: { type: "string" } } },
+    404: { type: "object", properties: { error: { type: "string" } } }
+  }
+};
+
+export const restoreSchema = {
+  description: "Deleta o usuário",
+  tags: ["Usuários"],
+  security: [{ bearerAuth: [] }],
+  params: {
+    type: "object",
+    properties: { id: { type: "integer" } }
+  },
+   response: {
+    200: { type: "object", properties: { message: { type: "string" } } },
+    404: { type: "object", properties: { error: { type: "string" } } }
+  }
+};
 
 export const loginSchema = {
   description: "Realiza o login",
@@ -54,11 +80,13 @@ export const loginSchema = {
       properties: {
         token: { type: "string" },
         name:  { type: "string" },
-        id:    { type: "integer"}
+        id:    { type: "string"},
+        type:  { type: "string"},
+        client_id: { type: "string" }
       }
     }
   }
-}
+};
 
 export const profileSchema = {
   description: "Retorna o perfil do usuário logado",
@@ -68,6 +96,6 @@ export const profileSchema = {
     200: userResponse,
     404: { type: "object", properties: { error: { type: "string" } } }
   }
-}
+};
 
 // export const modifySchema

@@ -4,22 +4,27 @@ const productBody = {
   properties: {
     name:         { type: "string", minLength: 3 },
     price:        { type: "integer", description: "Valor em centavos" },
-    stock:      { type: "integer", minimum: 0 },
-    category: { type: "integer" },
-    description:    { type: "string" },
+    stock:        { type: "integer", minimum: 0 },
+    category:     { type: "integer" },
+    description:  { type: "string" },
   }
 };
 
 const productResponse = {
   type: "object",
   properties: {
-    id:        { type: "integer" },
-    nome:      { type: "string" },
-    preco:     { type: "integer" },
-    estoque:   { type: "integer" },
-    descricao: { type: "string" },
-    imagem:    { type: "string" },
-    categoria: { type: "string" }
+    id:             { type: "integer" },
+    name:           { type: "string" },
+    image:          { type: "string" },
+    imagem_medium:  { type: "string" },
+    thumbnail:      { type: "string" },
+    price:          { type: "integer"},
+    description:    { type: "string" },
+    category:       { type: "string" },
+    category_id:    { type: "integer" },
+    stock:          { type: "string" },
+    active:         { type: "boolean" }
+
   }
 };
 
@@ -100,43 +105,48 @@ export const updateSchema = {
   body: productBody,
   response: {
     200: { type: "object", properties: { message: { type: "string" } } },
-    404: { type: 'object', properties: { error: { type: 'string' } } }
+    404: { type: 'object', properties: { error: { type: "string" } } }
   }
 };
 
-export const addImageSchema = {
-  description: "Adiciona imagem ao produto",
+export const updateImageSchema = {
+  description: "Atualiza imagem do produto",
   tags: ["Produtos"],
-  security: [{ bearerAuth: [] }],
-  consumes: ["multipart/form-data"],
   params: {
     type: "object",
     required: ["id"],
     properties: {
-      id: {
-        type: "integer"
+      id: { type: "integer" }
+    }
+  },
+  consumes: ["multipart/form-data"],
+  security: [{ bearerAuth: [] }],
+  body: {
+    type: "object",
+    required: ["image"],
+    properties: {
+      image: {
+        type: "string",
+        format: "binary"
       }
     }
   },
-response: {
-  200: {
-    type: "object",
-    properties: {
-      message: {
-        type: "string"
-      },
-
-      image: {
-        type: "object",
-        properties: {
-          large: { type: "string" },
-          medium: { type: "string" },
-          thumb: { type: "string" }
-        }
+  response: {
+    201: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+        affectedRows: { type: "integer" }
+      }
+    },
+    404: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+        statusCode: { type: "integer" }
       }
     }
   }
-}, 404: { type: 'object', properties: { errorr: { type: 'string' } } }
 };
 
 export const restoreSchema = {

@@ -24,10 +24,10 @@ Content-Type: application/json
     "items": [
         {
             "product_id": "1",
-            "quantity": "1"
+            "quantity": "3"
         }
     ],
-    "payment_method": "pix" // cartao, boleto
+    "payment_method": "pix" 
 }
 
 ### Listar pedidos

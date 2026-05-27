@@ -5,7 +5,7 @@ export const categoryController = {
     async register(request, reply){
         const data = request.body;
         const { category_id } = await categoryService.register(data);
-        console.log(category_id);
+
         return reply.status(201).send({
             message: "Categoria criada!",
             id: category_id
@@ -55,9 +55,9 @@ export const categoryController = {
             list
         );
     },
-    async findById(request, reply){
+    async listProductsByCategoryId(request, reply){
         const { id } = request.params;
-        const response = await categoryService.findById(id);
+        const response = await categoryService.listProductsByCategoryId(id);
 
         return reply.status(200).send(
             response

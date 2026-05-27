@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@id = 2
+@id = 1
 
 # @name login
 POST {{baseUrl}}/usuario/login
@@ -23,7 +23,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name":"example",
+    "name":"example games",
     "description":"example",
     "price":"1",
     "category":"1",
@@ -58,7 +58,7 @@ Content-Type: application/json
 {
     "name":"exampl3",
     "description":"exampl3",
-    "price":"1",
+    "price":"100",
     "category":"1",
     "stock":"2"  
 }

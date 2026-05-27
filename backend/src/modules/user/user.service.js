@@ -12,18 +12,13 @@ import
 
 export const userService = {
     async register(data){
-        const { email, password, cpf } = data;
+        const { email, password } = data;
 
         await validateEmail(email);
 
         const userExist = await UserRepository.findByEmail(email);
-        const cpfRegistered = await UserRepository.findByCpf(cpf);
 
         if (userExist) throw new ConflictError("Email já cadastrado!");
-        if (cpfRegistered) {
-            throw new ConflictError("Erro interno!");
-            return;
-        }
 
         const hashPassword = await bcrypt.hash(password, 10);
 
@@ -31,11 +26,13 @@ export const userService = {
     },
     async login(data){
         const { email, password } = data;
-
+        
         const user = await UserRepository.findByEmail(email);
-        const pass = await bcrypt.compare(password, user.senha_hash);
+        if (!user) throw new ValidationError("Email ou senha inválidos!");
 
-        if (!user || !pass) throw new ValidationError("Email ou senha inválidos!");
+        const pass = await bcrypt.compare(password, user.senha_hash);
+        if (!pass) throw new ValidationError("Email ou senha inválidos!");
+
         if (!user.ativo) throw new UnauthorizedError("Conta desativada!");
 
         return {

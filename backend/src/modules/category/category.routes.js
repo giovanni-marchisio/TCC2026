@@ -1,6 +1,7 @@
 import { categoryController } from "./category.controller"
+import { listProductsByCategoryIdSchema, listSchema } from "./category.schema";
 
 export async function categoryRoutes(server){
-    server.get("/", categoryController.list);
-    server.get("/:id", categoryController.findById);
+    server.get("/", { schema: listSchema }, categoryController.list);
+    server.get("/:id", { schema: listProductsByCategoryIdSchema },categoryController.listProductsByCategoryId);
 }

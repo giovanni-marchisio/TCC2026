@@ -86,6 +86,7 @@ class ProductRepositoryClass {
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
+                categoria.id as categoria_id,
                 produto.estoque
              FROM produto
              INNER JOIN categoria ON categoria.id = produto.categoria_id
@@ -93,7 +94,7 @@ class ProductRepositoryClass {
             `
         );
 
-        return list;
+        return list ?? [];
     };
     async listAll(){
         const [list] = await database.raw(
@@ -106,6 +107,7 @@ class ProductRepositoryClass {
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
+                categoria.id as categoria_id,
                 produto.estoque,
                 produto.ativo
              FROM produto
@@ -113,7 +115,7 @@ class ProductRepositoryClass {
             `
         );
 
-        return list;        
+        return list ?? [];        
     };
     async findById(id){
         const [product] = await database.raw(
@@ -126,6 +128,7 @@ class ProductRepositoryClass {
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
+                categoria.id as categoria_id,
                 produto.estoque,
                 produto.ativo
              FROM produto
@@ -156,6 +159,7 @@ class ProductRepositoryClass {
                 produto.descricao,
                 produto.preco,
                 categoria.nome as categoria,
+                categoria.id as categoria_id,
                 produto.estoque
              FROM produto
              INNER JOIN categoria ON categoria.id = produto.categoria_id
@@ -163,7 +167,7 @@ class ProductRepositoryClass {
             [`%${name}%`]
         );
 
-        return list;
+        return list ?? [];
     };
     async updateStock(id, newValue, db){
         const [product] = await db.raw(

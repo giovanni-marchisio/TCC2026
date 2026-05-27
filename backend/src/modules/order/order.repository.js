@@ -1,16 +1,42 @@
 import { database } from "../../configs/database";
 
 class OrderRepositoryClass {
-    async create(client_id, address_id, total, db){
+    async create(client_id, address, total, db){
+        const {
+            complement, 
+            street, 
+            streetNumber, 
+            neighborhood,
+            city,
+            state,
+            postalCode
+            } = address;
+
         const [result] = await db.raw(
             `INSERT INTO pedido 
             (
                 cliente_id,
-                endereco_id,
                 status,
-                valor_total
-            ) VALUES(?, ?, 'pendente', ?)`,
-             [client_id, address_id, total]
+                valor_total,
+                complemento,
+                logradouro,
+                numero,
+                bairro,
+                cidade,
+                uf,
+                cep
+            ) VALUES(?,'pendente', ?, ?, ?, ?, ?, ?, ?, ?)`,
+             [
+                client_id, 
+                total, 
+                complement, 
+                street, 
+                streetNumber, 
+                neighborhood,
+                city,
+                state,
+                postalCode
+            ]
         );
 
         return result;
@@ -59,7 +85,7 @@ class OrderRepositoryClass {
             [order_id]
         );
 
-        return list
+        return list ?? [];
     };
     async findByClientId(client_id){
         const [list] = await database.raw(
@@ -69,7 +95,7 @@ class OrderRepositoryClass {
             [client_id]
         );
 
-        return list;
+        return list ?? [];
     };
     async updateStatus(order_id, status){
         const [result] = await database.raw(

@@ -33,14 +33,25 @@ export const addressService = {
         
         return list;
     },
+    async findById(user_id, id){
+        await verifyAddress(user_id, id);
+        const address = AddressRepository.findById(id);
+
+        return {
+            user_id :cliente_id,
+            label :apelido,
+            complement :complemento,
+            street :logradouro,
+            streetNumber :numero,
+            neighborhood :bairro,
+            city :cidade,
+            state :uf,
+            postalCode :cep,
+            }
+    },
     async setMain(user_id, id){
         await verifyAddress(user_id, id);
         
         return AddressRepository.setMain(user_id, id);
     },
-    async findById(user_id, id){
-        await verifyAddress(user_id, id);
-
-        return AddressRepository.findById(id);
-    }
 };
